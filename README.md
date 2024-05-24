@@ -23,6 +23,11 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=sql@pa22w0rd" -p 1433:1433 -d --na
 Add default row as below
 p, SuperAdmin, users, list
 p, SuperAdmin, users, create
+p, SuperAdmin, roles, create
+p, SuperAdmin, roles, list
+p, SuperAdmin, roles, show
+p, SuperAdmin, roles, edit
+p, SuperAdmin, roles, delete
 p, SuperAdmin, roleclaims, list
 p, SuperAdmin, roleclaims, create
 p, SuperAdmin, roleclaims, show
