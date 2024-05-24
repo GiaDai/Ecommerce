@@ -1,1 +1,7 @@
-
+p, SuperAdmin, users, list
+p, SuperAdmin, users, create
+p, SuperAdmin, roleclaims, list
+p, SuperAdmin, roleclaims, create
+p, SuperAdmin, roleclaims, show
+p, SuperAdmin, roleclaims, edit
+p, SuperAdmin, roleclaims, delete
