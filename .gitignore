@@ -1,0 +1,6 @@
+/.vs
+**/bin/
+**/obj/
+**/node_modules/
+/.vscode
+Ecommerce/Ecommerce.WebApp.Server/wwwroot/policy.csv
