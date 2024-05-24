@@ -60,7 +60,7 @@ namespace Ecommerce.Infrastructure.Persistence
             }
         }
 
-        public static void AddNpgSqlPersistenceInfrastructure(this IServiceCollection services)
+        public static void AddNpgSqlPersistenceInfrastructure(this IServiceCollection services, string assembly)
         {
             // Build the intermediate service provider
             var sp = services.BuildServiceProvider();
@@ -75,7 +75,7 @@ namespace Ecommerce.Infrastructure.Persistence
                     appConnStr,
                     b =>
                     {
-                        b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                        b.MigrationsAssembly(assembly);
                         b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                     }));
                 }
