@@ -15,9 +15,9 @@ var _env = builder.Environment;
 _services.AddEnvironmentVariablesExtension();
 _services.AddIdentityLayer();
 _services.AddApplicationLayer();
-_services.AddSqlServerIdentityInfrastructure(_config);
+_services.AddNpgSqlIdentityInfrastructure();
 _services.AddIdentityRepositories(_config);
-_services.AddSqlServerPersistenceInfrastructure(typeof(Program).Assembly.FullName);
+_services.AddNpgSqlPersistenceInfrastructure(typeof(Program).Assembly.FullName);
 _services.AddPersistenceRepositories();
 _services.AddSharedInfrastructure(_config);
 if (_env.IsDevelopment())

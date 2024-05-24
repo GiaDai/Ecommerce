@@ -10,6 +10,20 @@ services:
       SQLSERVER_CONNECTION_STRING: Server=sqlserver;Database=Ecommerce;User Id=sa;Password=sql@pa22w0rd; TrustServerCertificate=Yes;
     networks:
       - ecommerce
+    depends_on:
+      - postgres
+  
+  postgres:
+    container_name: postgres
+    image: postgres:11.4-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - ecommerce
 networks:
   ecommerce:
     driver: bridge

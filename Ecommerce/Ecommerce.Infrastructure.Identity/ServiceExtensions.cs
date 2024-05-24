@@ -44,7 +44,7 @@ namespace Ecommerce.Infrastructure.Identity
             }
         }
 
-        public static void AddMySqlPersistenceInfrastructure(this IServiceCollection services)
+        public static void AddMySqlIdentityInfrastructure(this IServiceCollection services)
         {
             // Build the intermediate service provider
             var sp = services.BuildServiceProvider();
@@ -72,7 +72,7 @@ namespace Ecommerce.Infrastructure.Identity
             }
         }
 
-        public static void AddNpgSqlPersistenceInfrastructure(this IServiceCollection services)
+        public static void AddNpgSqlIdentityInfrastructure(this IServiceCollection services)
         {
             // Build the intermediate service provider
             var sp = services.BuildServiceProvider();
