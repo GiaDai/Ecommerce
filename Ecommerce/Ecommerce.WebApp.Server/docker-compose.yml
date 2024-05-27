@@ -7,7 +7,8 @@ services:
       - 8080:8080
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      SQLSERVER_CONNECTION_STRING: Server=sqlserver;Database=Ecommerce;User Id=sa;Password=sql@pa22w0rd; TrustServerCertificate=Yes;
+      POSTGRES_CONNECTION_STRING: Host=postgres;Database=postgres;Username=postgres;Password=postgres
+      CLOUDINARY_URL: cloudinary://853652539285151:35dgbXUNu7U4_zye8KiQkR5GagA@hqxqmqmoo
     networks:
       - ecommerce
     depends_on:
