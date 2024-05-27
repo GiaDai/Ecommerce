@@ -19,19 +19,22 @@ namespace Ecommerce.Infrastructure.Identity.Features.RoleClaim.Commands.UpdateRo
 
         public class UpdateRoleClaimCommandHandler : IRequestHandler<UpdateRoleClaimCommand, Response<IdentityRoleClaim<string>>>
         {
+
             private readonly Enforcer _enforcer;
             private readonly string _webRootPath;
             private readonly IdentityContext _context;
+            private readonly IHostingEnvironment _env;
 
             [Obsolete]
             public UpdateRoleClaimCommandHandler(
                 IdentityContext context,
-                IHostingEnvironment hostingEnvironment
+                IHostingEnvironment env
                 )
             {
-                _webRootPath = hostingEnvironment.WebRootPath;
+                _env = env;
+                _webRootPath = env.WebRootPath;
                 _context = context;
-                _enforcer = new Enforcer(Path.Combine(_webRootPath, "model.conf"), Path.Combine(_webRootPath, "policy.csv"));
+                _enforcer = new Enforcer(Path.Combine(_webRootPath, "model.conf"), Path.Combine(_webRootPath, _env.IsProduction() ? "policy.csv" : "policy-dev.csv"));
             }
 
             public async Task<Response<IdentityRoleClaim<string>>> Handle(UpdateRoleClaimCommand request, CancellationToken cancellationToken)

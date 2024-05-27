@@ -4,4 +4,5 @@
 **/node_modules/
 /.vscode
 Ecommerce/Ecommerce.WebApp.Server/wwwroot/policy.csv
+Ecommerce/Ecommerce.WebApp.Server/wwwroot/policy-dev.csv
 Ecommerce/Ecommerce.WebApp.Server/appsettings.Development.json
