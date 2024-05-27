@@ -11,14 +11,17 @@ public class RecureHostedService : IHostedService, IDisposable
     private readonly ILogger _log;
     private Timer _timer;
     private readonly Cloudinary _cloudinary;
+    private IHostEnvironment _env;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ICloudinarySettingsProvider _cloudinaryProvider;
     public RecureHostedService(
         ILogger<RecureHostedService> log,
+        IHostEnvironment env,
         IHttpClientFactory httpClientFactory,
         ICloudinarySettingsProvider cloudinaryProvider
         )
     {
+        _env = env;
         _log = log;
         _httpClientFactory = httpClientFactory;
         _cloudinaryProvider = cloudinaryProvider;
@@ -48,7 +51,7 @@ public class RecureHostedService : IHostedService, IDisposable
     private void UploadPolicyToCloudinary(object? state)
     {
         // get file path policy.csv in wwwroot directory
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "policy.csv");
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", _env.IsProduction() ? "policy.csv" : "policy-dev.csv");
         if (File.Exists(filePath))
         {
             // upload file to cloudinary
@@ -77,7 +80,7 @@ public class RecureHostedService : IHostedService, IDisposable
     private void DownloadPolicyFromCloudinary(object? state)
     {
         // download file policy/policy.csv from cloudinary and save to wwwroot directory
-        var getResourceParams = new GetResourceParams("policy/policy.csv")
+        var getResourceParams = new GetResourceParams(_env.IsProduction() ? "policy/policy.csv" : "policy/policy-dev.csv")
         {
             ResourceType = ResourceType.Raw,
         };
@@ -91,7 +94,7 @@ public class RecureHostedService : IHostedService, IDisposable
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result;
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "policy.csv");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", _env.IsProduction() ? "policy.csv" : "policy-dev.csv");
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
