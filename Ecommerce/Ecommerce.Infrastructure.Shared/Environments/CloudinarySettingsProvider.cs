@@ -22,7 +22,7 @@ namespace Ecommerce.Infrastructure.Shared.Environments
             var isHasMySQLConnectionString = EnvironmentVariables.HasCloudinaryCloudUrl();
             if (_env.IsProduction() && isHasMySQLConnectionString)
             {
-                return Environment.GetEnvironmentVariable(EnvironmentVariables.ElasticApiKey);
+                return Environment.GetEnvironmentVariable(EnvironmentVariables.CloudinaryCloudUrl);
             }
             return _config["UploadProvider:CloudinaryUrl"];
         }
