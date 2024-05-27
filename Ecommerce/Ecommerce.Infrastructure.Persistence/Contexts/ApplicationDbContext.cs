@@ -32,11 +32,11 @@ namespace Ecommerce.Infrastructure.Persistence.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.Created = _dateTime.Now;
+                        entry.Entity.Created = _dateTime.NowUtc;
                         entry.Entity.CreatedBy = _authenticatedUser.UserId;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModified = _dateTime.Now;
+                        entry.Entity.LastModified = _dateTime.NowUtc;
                         entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
                         break;
                 }
