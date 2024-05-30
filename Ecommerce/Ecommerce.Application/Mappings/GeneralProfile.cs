@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ecommerce.Application.Features.ProductAttributeMappings.Commands.CreateProductAttributeMapping;
 using Ecommerce.Application.Features.ProductAttributes.Commands.CreateProductAttribute;
 using Ecommerce.Application.Features.ProductAttributes.Queries.GetAllProductAttributes;
 using Ecommerce.Application.Features.Products.Commands.CreateProduct;
@@ -20,6 +21,9 @@ namespace Ecommerce.Application.Mappings
 
             CreateMap<CreateProductAttributeCommand, ProductAttribute>();
             CreateMap<GetAllProductAttributesQuery, GetAllProductAttributeParameter>();
+
+            CreateMap<CreateProductAttributeMappingCommandHandler, ProductAttributeMapping>();
+
         }
     }
 }
