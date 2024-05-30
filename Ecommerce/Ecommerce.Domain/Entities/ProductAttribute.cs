@@ -1,17 +1,23 @@
-﻿using Ecommerce.Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Ecommerce.Domain.Common;
 
 namespace Ecommerce.Domain.Entities
 {
-    public class Product : AuditableBaseEntity
+    /// <summary>
+    /// Represents a product attribute
+    /// </summary>
+    public class ProductAttribute : AuditableBaseEntity
     {
+        /// <summary>
+        /// Gets or sets the name
+        /// </summary>
         public string Name { get; set; }
-        public string Barcode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description
+        /// </summary>
         public string Description { get; set; }
-        public decimal Rate { get; set; }
-        public decimal Price { get; set; }
         /// <summary>
         /// Has many product attribute mappings
         /// </summary>

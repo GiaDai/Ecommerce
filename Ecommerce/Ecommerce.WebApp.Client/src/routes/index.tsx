@@ -5,3 +5,4 @@ export * from "./authens";
 export * from "./dashboards";
 export * from "./investors";
 export * from "./products";
+export * from "./productattributes";

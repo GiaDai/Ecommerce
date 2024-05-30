@@ -12,6 +12,7 @@ namespace Ecommerce.WebApp.Server.Controllers
     public abstract class BaseApiController : ControllerBase
     {
         private IMediator _mediator;
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
         protected readonly Enforcer _enforcer;
@@ -20,8 +21,9 @@ namespace Ecommerce.WebApp.Server.Controllers
         [Obsolete]
         public BaseApiController(Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
         {
+            _env = hostingEnvironment;
             _webRootPath = hostingEnvironment.WebRootPath;
-            _enforcer = new Enforcer(Path.Combine(_webRootPath, "model.conf"), Path.Combine(_webRootPath, "policy.csv"));
+            _enforcer = new Enforcer(Path.Combine(_webRootPath, "model.conf"), Path.Combine(_webRootPath, _env.IsProduction() ? "policy.csv" : "policy-dev.csv"));
         }
 
         protected async Task<IActionResult> EnforcePermissionAndExecute(string resource, string action, Func<Task<IActionResult>> func)
