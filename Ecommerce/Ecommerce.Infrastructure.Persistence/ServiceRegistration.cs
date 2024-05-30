@@ -87,6 +87,8 @@ namespace Ecommerce.Infrastructure.Persistence
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
+            services.AddTransient<IProductAttributeRepositoryAsync, ProductAttributeRepositoryAsync>();
+            services.AddTransient<IProductAttributeMappingRepositoryAsync, ProductAttributeMappingRepositoryAsync>();
             #endregion
         }
     }

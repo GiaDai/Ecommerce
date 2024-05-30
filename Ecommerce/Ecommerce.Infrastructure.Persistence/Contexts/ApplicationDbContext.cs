@@ -2,11 +2,7 @@
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +20,8 @@ namespace Ecommerce.Infrastructure.Persistence.Contexts
             _authenticatedUser = authenticatedUser;
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<ProductAttributeMapping> ProductAttributeMappings { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

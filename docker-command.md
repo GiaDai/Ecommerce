@@ -13,6 +13,8 @@ dotnet ef migrations add InitialProductTable --context ApplicationDbContext
 docker network create -d bridge ecommerce
 docker network connect ecommerce sqlserver
 
+docker-compose -f docker-compose-postgres.yml up
+
 git config core.ignorecase true
 git config --global core.ignorecase true
 

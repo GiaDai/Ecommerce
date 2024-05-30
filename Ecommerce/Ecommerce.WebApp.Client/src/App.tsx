@@ -25,20 +25,25 @@ import {
 } from "@routes/identity/users";
 import {
   CloneProduct,
+  CloneProductAttribute,
   CloneRole,
   CloneRoleClaim,
   CreateProduct,
+  CreateProductAttribute,
   CreateRangeProduct,
   CreateRole,
   CreateRoleClaim,
   Dashboard,
   EditProduct,
+  EditProductAttribute,
   EditRole,
   EditRoleClaim,
   ListProduct,
+  ListProductAttribute,
   ListRole,
   ListRoleClaim,
   ShowProduct,
+  ShowProductAttribute,
   ShowRole,
   ShowRoleClaim,
 } from "./routes";
@@ -176,6 +181,68 @@ const App: React.FC = () => {
                         fallback={<Unauthorized />}
                       >
                         <ShowProduct />
+                      </CanAccess>
+                    }
+                  />
+                </Route>
+                <Route path="product-attributes">
+                  <Route
+                    index
+                    element={
+                      <CanAccess
+                        resource="product-attributes"
+                        action="list"
+                        fallback={<Unauthorized />}
+                      >
+                        <ListProductAttribute />
+                      </CanAccess>
+                    }
+                  />
+                  <Route
+                    path="create"
+                    element={
+                      <CanAccess
+                        resource="product-attributes"
+                        action="create"
+                        fallback={<Unauthorized />}
+                      >
+                        <CreateProductAttribute />
+                      </CanAccess>
+                    }
+                  />
+                  <Route
+                    path=":id/clone"
+                    element={
+                      <CanAccess
+                        resource="product-attributes"
+                        action="clone"
+                        fallback={<Unauthorized />}
+                      >
+                        <CloneProductAttribute />
+                      </CanAccess>
+                    }
+                  />
+                  <Route
+                    path=":id/edit"
+                    element={
+                      <CanAccess
+                        resource="product-attributes"
+                        action="edit"
+                        fallback={<Unauthorized />}
+                      >
+                        <EditProductAttribute />
+                      </CanAccess>
+                    }
+                  />
+                  <Route
+                    path=":id"
+                    element={
+                      <CanAccess
+                        resource="product-attributes"
+                        action="show"
+                        fallback={<Unauthorized />}
+                      >
+                        <ShowProductAttribute />
                       </CanAccess>
                     }
                   />

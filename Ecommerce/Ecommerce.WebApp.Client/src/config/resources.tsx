@@ -30,6 +30,19 @@ export const resources: IResourceItem[] = [
     },
   },
   {
+    name: "product-attributes",
+    list: "/product-attributes",
+    create: "/product-attributes/create",
+    clone: "/product-attributes/:id/clone",
+    edit: "/product-attributes/:id/edit",
+    show: "/product-attributes/:id",
+    meta: {
+      canDelete: true,
+      label: "Product Attributes",
+      icon: <UserOutlined />,
+    },
+  },
+  {
     name: "users",
     list: "/users",
     create: "/users/create",
