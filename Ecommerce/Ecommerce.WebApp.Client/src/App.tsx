@@ -260,22 +260,11 @@ const App: React.FC = () => {
                       <ListProductAttributeMapping />
                     }
                   />
-                  <Route
-                    path="create"
-                    element={
-                      <CreateProductAttributeMapping />
-                    }
-                  />
+
                   <Route
                     path=":id/clone"
                     element={
                       <CloneProductAttributeMapping />
-                    }
-                  />
-                  <Route
-                    path=":id/edit"
-                    element={
-                      <EditProductAttributeMapping />
                     }
                   />
                   <Route

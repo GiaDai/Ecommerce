@@ -1,12 +1,14 @@
-import { useForm, useSelect, Edit } from "@refinedev/antd";
+import { useSelect, Edit } from "@refinedev/antd";
 import { Checkbox, Form, Input, InputNumber, Select } from "antd";
 import { IProductAttributeMapping } from "./types";
 import { AttributeControlTypeIdData } from "./dummy";
-export const EditProductAttributeMapping = () => {
 
-    const { formProps, saveButtonProps } = useForm<IProductAttributeMapping>({
-        redirect: "list",
-    });
+interface EditProductAttributeMappingProps {
+    formProps: any;
+    saveButtonProps: any;
+}
+
+export const EditProductAttributeMapping: React.FC<EditProductAttributeMappingProps> = ({ formProps, saveButtonProps }) => {
 
     const { selectProps: selectPropsProduct } = useSelect({
         resource: "products",
@@ -32,8 +34,14 @@ export const EditProductAttributeMapping = () => {
         <Edit
             resource="product-attribute-mappings"
             saveButtonProps={saveButtonProps}
+            breadcrumb={false}
+            goBack={false}
+
         >
             <Form {...formProps} layout="vertical">
+                <Form.Item label="ID" name="Id" hidden>
+                    <Input />
+                </Form.Item>
                 <Form.Item
                     label="Product"
                     name="ProductId"
