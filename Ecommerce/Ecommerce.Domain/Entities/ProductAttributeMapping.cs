@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ecommerce.Domain.Common;
 
 namespace Ecommerce.Domain.Entities
@@ -78,5 +79,10 @@ namespace Ecommerce.Domain.Entities
             get => (AttributeControlType)AttributeControlTypeId;
             set => AttributeControlTypeId = (int)value;
         }
+
+        /// <summary>
+        /// Has many product attribute values
+        /// </summary>
+        public ICollection<ProductAttributeValue> ProductAttributeValues { get; set; }
     }
 }

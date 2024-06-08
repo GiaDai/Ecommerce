@@ -22,6 +22,7 @@ namespace Ecommerce.Infrastructure.Persistence.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeMapping> ProductAttributeMappings { get; set; }
+        public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

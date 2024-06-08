@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Ecommerce.Application.Features.ProductAttributeMappings.Queries.GetPagedProdAttrMap;
+using Ecommerce.Application.Features.ProductAttrMaps.Queries.GetPagedProdAttrMap;
 using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
 using Ecommerce.Domain.Entities;
@@ -20,9 +20,9 @@ public class ProductAttributeMappingRepositoryAsync : GenericRepositoryAsync<Pro
         _productAttributeMappings = dbContext.Set<ProductAttributeMapping>();
     }
 
-    public async Task<PagedList<ProductAttributeMapping>> GetPagedProdAttrMapAsync(GetPagedProdAttrMapByProductIdParameter request)
+    public async Task<PagedList<ProductAttributeMapping>> GetPagedProdAttrMapAsync(GetPagingProdAttrMapParameter request)
     {
-        var prodAttrMapQuery = _productAttributeMappings.Where(x => x.ProductId.Equals(request._productid)).AsQueryable();
+        var prodAttrMapQuery = _productAttributeMappings.AsQueryable();
         if (request._filter != null && request._filter.Count > 0)
         {
             prodAttrMapQuery = MethodExtensions.ApplyFilters(prodAttrMapQuery, request._filter);

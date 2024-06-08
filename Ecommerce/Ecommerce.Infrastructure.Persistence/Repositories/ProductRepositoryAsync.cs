@@ -44,5 +44,10 @@ namespace Ecommerce.Infrastructure.Persistence.Repositories
 
             return await PagedList<Product>.ToPagedList(productQuery.OrderByDynamic(request._sort, request._order).AsNoTracking(), request._start, request._end);
         }
+
+        public async Task<List<Product>> GetProductsByIdsAsync(List<int> ids)
+        {
+            return await _products.AsNoTracking().Where(p => ids.Contains(p.Id)).ToListAsync();
+        }
     }
 }

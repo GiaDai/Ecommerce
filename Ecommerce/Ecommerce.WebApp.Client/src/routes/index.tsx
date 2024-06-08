@@ -6,3 +6,4 @@ export * from "./dashboards";
 export * from "./investors";
 export * from "./products";
 export * from "./productattributes";
+export * from "./prodattrvals";

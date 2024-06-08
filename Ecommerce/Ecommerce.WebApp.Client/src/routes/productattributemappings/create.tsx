@@ -1,18 +1,35 @@
-import { useForm, Create } from "@refinedev/antd";
-import { Form, Input } from "antd";
+import { useForm, Create, useSelect } from "@refinedev/antd";
+import { Checkbox, Form, Input, InputNumber, Select } from "antd";
 import { IProductAttributeMapping } from "./types";
 import React from "react";
+import { AttributeControlTypeIdData } from "./dummy";
 
-type IProductAttributeMappingProps = {
-  ProductId: number;
-};
 
-export const CreateProductAttributeMapping: React.FC<
-  IProductAttributeMappingProps
-> = ({ ProductId }) => {
+export const CreateProductAttributeMapping: React.FC = () => {
   const { formProps, saveButtonProps } = useForm<IProductAttributeMapping>({
-    redirect: "edit",
+    redirect: "list",
   });
+
+  const { selectProps: selectPropsProduct } = useSelect({
+    resource: "products",
+    optionLabel: "Name",
+    optionValue: "Id",
+    pagination: {
+      pageSize: 99999,
+      current: 1,
+    }
+  });
+
+  const { selectProps: selectPropsProdAttr } = useSelect({
+    resource: "product-attributes",
+    optionLabel: "Name",
+    optionValue: "Id",
+    pagination: {
+      pageSize: 99999,
+      current: 1,
+    }
+  });
+
   return (
     <Create
       resource="product-attribute-mappings"
@@ -20,16 +37,20 @@ export const CreateProductAttributeMapping: React.FC<
     >
       <Form {...formProps} layout="vertical">
         <Form.Item
-          hidden
-          label="Product Id"
+          label="Product"
           name="ProductId"
-          initialValue={ProductId}
+          rules={[
+            {
+              required: true,
+              message: "Please input your product id!",
+            },
+          ]}
         >
-          <Input />
+          <Select {...selectPropsProduct} />
         </Form.Item>
 
         <Form.Item
-          label="Product Attribute Id"
+          label="Product Attribute"
           name="ProductAttributeId"
           rules={[
             {
@@ -38,58 +59,33 @@ export const CreateProductAttributeMapping: React.FC<
             },
           ]}
         >
-          <Input />
+          <Select {...selectPropsProdAttr} />
         </Form.Item>
 
         <Form.Item
           label="Text Prompt"
           name="TextPrompt"
-          rules={[
-            { required: true, message: "Please input your text prompt!" },
-            {
-              min: 3,
-              message: "Text prompt must be at least 3 characters long!",
-            },
-            {
-              max: 255,
-              message: "Text prompt must be at most 255 characters long!",
-            },
-          ]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item
-          label="Is Required"
-          name="IsRequired"
-          rules={[
-            { required: true, message: "Please input your is required!" },
-          ]}
-        >
-          <Input />
+        <Form.Item<IProductAttributeMapping> name="IsRequired" valuePropName="checked">
+          <Checkbox>Is Required</Checkbox>
         </Form.Item>
 
         <Form.Item
-          label="Attribute Control Type Id"
+          label="Control type"
           name="AttributeControlTypeId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your attribute control type id!",
-            },
-          ]}
+          rules={[{ required: true, message: "Control type is required" }]}
         >
-          <Input />
+          <Select options={AttributeControlTypeIdData} />
         </Form.Item>
 
         <Form.Item
           label="Display Order"
           name="DisplayOrder"
-          rules={[
-            { required: true, message: "Please input your display order!" },
-          ]}
         >
-          <Input />
+          <InputNumber defaultValue={1} />
         </Form.Item>
       </Form>
     </Create>
