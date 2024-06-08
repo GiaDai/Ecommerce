@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using Ecommerce.Application.Features.ProductAttributes.Commands.CreateProductAttribute;
-using Ecommerce.Application.Features.ProductAttributes.Queries.GetAllProductAttributes;
+using Ecommerce.Application.Features.ProductAttrMaps.Commands.CreateProductAttrMapping;
+using Ecommerce.Application.Features.ProductAttrMaps.Queries.GetPagedProdAttrMap;
+using Ecommerce.Application.Features.ProductAttrs.Commands.CreateProductAttr;
+using Ecommerce.Application.Features.ProductAttrs.Queries.GetPagingProductAttrs;
+using Ecommerce.Application.Features.ProductAttrVals.Commands.CreateProdAttrVal;
+using Ecommerce.Application.Features.ProductAttrVals.Queries.GetPagingProductAttrVals;
 using Ecommerce.Application.Features.Products.Commands.CreateProduct;
 using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 using Ecommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ecommerce.Application.Mappings
 {
@@ -18,8 +19,14 @@ namespace Ecommerce.Application.Mappings
             CreateMap<CreateProductCommand, Product>();
             CreateMap<GetAllProductsQuery, GetAllProductsParameter>();
 
-            CreateMap<CreateProductAttributeCommand, ProductAttribute>();
-            CreateMap<GetAllProductAttributesQuery, GetAllProductAttributeParameter>();
+            CreateMap<CreateProductAttrCommand, ProductAttribute>();
+            CreateMap<GetPagingProductAttrQuery, GetPagingProductAttrParameter>();
+
+            CreateMap<CreateProductAttributeMappingCommand, ProductAttributeMapping>();
+            CreateMap<GetPagingProdAttrMapQuery, GetPagingProdAttrMapParameter>();
+
+            CreateMap<CreateProdAttrValCommand, ProductAttributeValue>();
+            CreateMap<GetPagingProdAttrValQuery, GetPagingProdAttrValParamter>();
         }
     }
 }

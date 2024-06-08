@@ -43,6 +43,32 @@ export const resources: IResourceItem[] = [
     },
   },
   {
+    name: "product-attribute-values",
+    list: "/product-attribute-values",
+    create: "/product-attribute-values/create",
+    clone: "/product-attribute-values/:id/clone",
+    edit: "/product-attribute-values/:id/edit",
+    show: "/product-attribute-values/:id",
+    meta: {
+      canDelete: true,
+      label: "Prod Attr Values",
+      icon: <UserOutlined />,
+    },
+  },
+  {
+    name: "product-attribute-mappings",
+    list: "/product-attribute-mappings",
+    create: "/product-attribute-mappings/create",
+    clone: "/product-attribute-mappings/:id/clone",
+    edit: "/product-attribute-mappings/:id/edit",
+    show: "/product-attribute-mappings/:id",
+    meta: {
+      canDelete: true,
+      label: "Prod Attr Mappings",
+      icon: <UserOutlined />,
+    },
+  },
+  {
     name: "users",
     list: "/users",
     create: "/users/create",

@@ -101,11 +101,29 @@ namespace Ecommerce.WebApp.Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AttributeControlType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AttributeControlTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConditionAttributeXml")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
+
+                    b.Property<string>("DefaultValue")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -119,6 +137,21 @@ namespace Ecommerce.WebApp.Server.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("TextPrompt")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ValidationFileAllowedExtensions")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ValidationFileMaximumSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ValidationMaxLength")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ValidationMinLength")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductAttributeId");
@@ -126,6 +159,78 @@ namespace Ecommerce.WebApp.Server.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductAttributeMappings");
+                });
+
+            modelBuilder.Entity("Ecommerce.Domain.Entities.ProductAttributeValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssociatedProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AttributeValueType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AttributeValueTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ColorSquaresRgb")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("CustomerEntersQty")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ImageSquaresPictureId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsPreSelected")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("PriceAdjustment")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<bool>("PriceAdjustmentUsePercentage")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProductAttributeMappingId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("WeightAdjustment")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductAttributeMappingId");
+
+                    b.ToTable("ProductAttributeValues");
                 });
 
             modelBuilder.Entity("Ecommerce.Domain.Entities.ProductAttributeMapping", b =>
@@ -147,6 +252,17 @@ namespace Ecommerce.WebApp.Server.Migrations
                     b.Navigation("ProductAttribute");
                 });
 
+            modelBuilder.Entity("Ecommerce.Domain.Entities.ProductAttributeValue", b =>
+                {
+                    b.HasOne("Ecommerce.Domain.Entities.ProductAttributeMapping", "ProductAttributeMapping")
+                        .WithMany("ProductAttributeValues")
+                        .HasForeignKey("ProductAttributeMappingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductAttributeMapping");
+                });
+
             modelBuilder.Entity("Ecommerce.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ProductAttributeMappings");
@@ -155,6 +271,11 @@ namespace Ecommerce.WebApp.Server.Migrations
             modelBuilder.Entity("Ecommerce.Domain.Entities.ProductAttribute", b =>
                 {
                     b.Navigation("ProductAttributeMappings");
+                });
+
+            modelBuilder.Entity("Ecommerce.Domain.Entities.ProductAttributeMapping", b =>
+                {
+                    b.Navigation("ProductAttributeValues");
                 });
 #pragma warning restore 612, 618
         }

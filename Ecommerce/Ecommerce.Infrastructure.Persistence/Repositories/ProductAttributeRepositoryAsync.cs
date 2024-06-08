@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Ecommerce.Application;
-using Ecommerce.Application.Features.ProductAttributes.Queries.GetAllProductAttributes;
+using Ecommerce.Application.Features.ProductAttrs.Queries.GetPagingProductAttrs;
 using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
 using Ecommerce.Domain.Entities;
@@ -19,7 +21,12 @@ public class ProductAttributeRepositoryAsync : GenericRepositoryAsync<ProductAtt
         _productAttributes = dbContext.Set<ProductAttribute>();
     }
 
-    public async Task<PagedList<ProductAttribute>> GetPagedProductAttributesAsync(GetAllProductAttributeParameter parameter)
+    public async Task<List<ProductAttribute>> GetProductsByIdsAsync(List<int> ids)
+    {
+        return await _productAttributes.AsNoTracking().Where(p => ids.Contains(p.Id)).ToListAsync();
+    }
+
+    public async Task<PagedList<ProductAttribute>> GetPagedProductAttributesAsync(GetPagingProductAttrParameter parameter)
     {
         var productAttributeQuery = _productAttributes.AsQueryable();
         if (parameter._filter != null && parameter._filter.Count > 0)

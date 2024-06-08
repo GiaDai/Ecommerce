@@ -28,6 +28,7 @@ namespace Ecommerce.WebApp.Server.Controllers.v1
             {
                 return Ok(await Mediator.Send(new GetAllProductsQuery()
                 {
+                    id = filter.id,
                     _end = filter._end,
                     _start = filter._start,
                     _order = filter._order,

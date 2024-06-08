@@ -9,6 +9,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts
 {
     public class GetAllProductsQuery : IRequest<Response<object>>
     {
+        public List<int> id { get; set; }
         public int _start { get; set; }
         public int _end { get; set; }
         public string _sort { get; set; }
@@ -27,6 +28,12 @@ namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts
 
         public async Task<Response<object>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
+            if (request.id != null && request.id.Count > 0)
+            {
+                var productIds = await _productRepository.GetProductsByIdsAsync(request.id);
+                return new Response<object>(true, productIds, message: "Success");
+            }
+
             var validFilter = _mapper.Map<GetAllProductsParameter>(request);
             var product = await _productRepository.GetPagedProductsAsync(validFilter);
             return new Response<object>(true, new

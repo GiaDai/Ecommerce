@@ -36,7 +36,7 @@ public class RecureHostedService : IHostedService, IDisposable
     {
         _log.LogInformation("RecureHostedService is Starting");
         _log.LogInformation(_cloudinaryProvider.GetConnectionString());
-        DownloadPolicyFromCloudinary(null); // Pass null as the argument
+        // DownloadPolicyFromCloudinary(null); // Pass null as the argument
 
         return Task.CompletedTask;
     }

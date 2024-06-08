@@ -11,5 +11,6 @@ namespace Ecommerce.Application.Interfaces.Repositories
         Task<bool> IsUniqueBarcodeAsync(string barcode);
         Task<int> DeleteRangeAsync(List<int> ids);
         Task<PagedList<Product>> GetPagedProductsAsync(GetAllProductsParameter parameter);
+        Task<List<Product>> GetProductsByIdsAsync(List<int> ids);
     }
 }

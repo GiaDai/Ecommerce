@@ -24,30 +24,36 @@ import {
   ShowUser,
 } from "@routes/identity/users";
 import {
+  CloneProdAttrVal,
   CloneProduct,
   CloneProductAttribute,
   CloneRole,
   CloneRoleClaim,
+  CreateProdAttrVal,
   CreateProduct,
   CreateProductAttribute,
   CreateRangeProduct,
   CreateRole,
   CreateRoleClaim,
   Dashboard,
+  EditProdAttrVal,
   EditProduct,
   EditProductAttribute,
   EditRole,
   EditRoleClaim,
+  ListProdAttrVals,
   ListProduct,
   ListProductAttribute,
   ListRole,
   ListRoleClaim,
+  ShowProdAttrVal,
   ShowProduct,
   ShowProductAttribute,
   ShowRole,
   ShowRoleClaim,
 } from "./routes";
 import { Unauthorized } from "@components/unauthorized";
+import { CloneProductAttributeMapping, CreateProductAttributeMapping, EditProductAttributeMapping, ListProductAttributeMapping, ShowProductAttributeMapping } from "@routes/productattributemappings";
 
 const App: React.FC = () => {
   return (
@@ -244,6 +250,70 @@ const App: React.FC = () => {
                       >
                         <ShowProductAttribute />
                       </CanAccess>
+                    }
+                  />
+                </Route>
+                <Route path="product-attribute-mappings">
+                  <Route
+                    index
+                    element={
+                      <ListProductAttributeMapping />
+                    }
+                  />
+                  <Route
+                    path="create"
+                    element={
+                      <CreateProductAttributeMapping />
+                    }
+                  />
+                  <Route
+                    path=":id/clone"
+                    element={
+                      <CloneProductAttributeMapping />
+                    }
+                  />
+                  <Route
+                    path=":id/edit"
+                    element={
+                      <EditProductAttributeMapping />
+                    }
+                  />
+                  <Route
+                    path=":id"
+                    element={
+                      <ShowProductAttributeMapping />
+                    }
+                  />
+                </Route>
+                <Route path="product-attribute-values">
+                  <Route
+                    index
+                    element={
+                      <ListProdAttrVals />
+                    }
+                  />
+                  <Route
+                    path="create"
+                    element={
+                      <CreateProdAttrVal />
+                    }
+                  />
+                  <Route
+                    path=":id/clone"
+                    element={
+                      <CloneProdAttrVal />
+                    }
+                  />
+                  <Route
+                    path=":id/edit"
+                    element={
+                      <EditProdAttrVal />
+                    }
+                  />
+                  <Route
+                    path=":id"
+                    element={
+                      <ShowProdAttrVal />
                     }
                   />
                 </Route>
@@ -464,8 +534,8 @@ const App: React.FC = () => {
                       registerLink={false}
                       formProps={{
                         initialValues: {
-                          email: "",
-                          password: "",
+                          email: "basicuser@gmail.com",
+                          password: "123Pa$$word!",
                         },
                       }}
                     />

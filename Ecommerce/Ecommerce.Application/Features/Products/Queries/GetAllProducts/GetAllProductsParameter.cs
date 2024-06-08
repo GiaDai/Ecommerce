@@ -7,6 +7,6 @@ namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts
 {
     public class GetAllProductsParameter : RequestParameter
     {
-
+        public List<int> id { get; set; }
     }
 }
