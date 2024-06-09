@@ -23,7 +23,8 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
             public async Task<Response<int>> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
             {
-                var result = await _orderRepository.PlaceOrderAsync(request.ProductId);
+                var result = _orderRepository.PlaceOrderForwardAsync(request.ProductId);
+                await Task.CompletedTask;
                 return new Response<int>(result);
             }
         }

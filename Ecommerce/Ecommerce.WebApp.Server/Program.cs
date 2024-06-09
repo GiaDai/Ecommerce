@@ -3,6 +3,7 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Identity;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Shared;
+using Ecommerce.WebApp.Server.Consumers;
 using Ecommerce.WebApp.Server.Extensions;
 using Ecommerce.WebApp.Server.HostedService;
 using Ecommerce.WebApp.Server.Initializer;
@@ -21,16 +22,18 @@ _services.AddIdentityRepositories(_config);
 _services.AddMySqlPersistenceInfrastructure(typeof(Program).Assembly.FullName);
 _services.AddPersistenceRepositories();
 _services.AddSharedInfrastructure(_config);
+_services.AddRabbitMqFactoryExtension();
 if (_env.IsDevelopment())
 {
     _services.AddSwaggerExtension();
 }
-
+_services.AddHostedService<OrderConsumer>();
 _services.AddControllers().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 _services.AddApiVersioningExtension();
 _services.AddHealthChecks();
 _services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 _services.AddHttpClient();
+
 _services.AddSingleton<IHostedService, RecureHostedService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 _services.AddEndpointsApiExplorer();
@@ -63,7 +66,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.UseAuthorization();
 
-app.UseErrorHandlingMiddleware();
+// app.UseErrorHandlingMiddleware();
 app.UseHealthChecks("/health");
 app.MapControllers();
 

@@ -6,6 +6,7 @@ namespace Ecommerce.Application.Interfaces.Repositories
 {
     public interface IOrderRepositoryAsync : IGenericRepositoryAsync<Order>
     {
+        int PlaceOrderForwardAsync(int productId);
         Task<int> PlaceOrderAsync(int productId);
     }
 }
