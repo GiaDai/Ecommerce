@@ -20,6 +20,7 @@ namespace Ecommerce.Infrastructure.Persistence.Contexts
             _authenticatedUser = authenticatedUser;
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeMapping> ProductAttributeMappings { get; set; }
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }

@@ -90,6 +90,7 @@ namespace Ecommerce.Infrastructure.Persistence
             services.AddTransient<IProductAttributeRepositoryAsync, ProductAttributeRepositoryAsync>();
             services.AddTransient<IProductAttributeMappingRepositoryAsync, ProductAttributeMappingRepositoryAsync>();
             services.AddTransient<IProductAttrValueRepositoryAsync, ProductAttrValueRepositoryAsync>();
+            services.AddTransient<IOrderRepositoryAsync, OrderRepositoryAsync>();
             #endregion
         }
     }
