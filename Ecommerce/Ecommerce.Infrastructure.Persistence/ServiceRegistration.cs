@@ -32,7 +32,7 @@ namespace Ecommerce.Infrastructure.Persistence
             }
         }
 
-        public static void AddMySqlPersistenceInfrastructure(this IServiceCollection services)
+        public static void AddMySqlPersistenceInfrastructure(this IServiceCollection services, string assembly)
         {
             // Build the intermediate service provider
             var sp = services.BuildServiceProvider();
@@ -53,7 +53,7 @@ namespace Ecommerce.Infrastructure.Persistence
                                 maxRetryCount: 5,
                                 maxRetryDelay: TimeSpan.FromSeconds(30),
                                 errorNumbersToAdd: null);
-                            b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                            b.MigrationsAssembly(assembly);
                             b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                         }));
                 }

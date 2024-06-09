@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // Số lượng yêu cầu
-const requestCount = 2;
+const requestCount = 1000;
 
 // Thông tin người dùng (mã sản phẩm, cookie, v.v.)
 const users = [

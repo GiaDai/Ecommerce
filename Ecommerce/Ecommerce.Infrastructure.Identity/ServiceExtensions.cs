@@ -66,6 +66,7 @@ namespace Ecommerce.Infrastructure.Identity
                                 maxRetryDelay: TimeSpan.FromSeconds(30),
                                 errorNumbersToAdd: null);
                             b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName);
+                            // b.MigrationsAssembly("Ecommerce.WebApp.Server");
                             b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                         }));
                 }
