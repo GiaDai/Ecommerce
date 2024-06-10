@@ -6,12 +6,13 @@ using Ecommerce.Application.Features.Products.Commands.DeleteProductByIds;
 using Ecommerce.Application.Features.Products.Commands.UpdateProduct;
 using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 using Ecommerce.Application.Features.Products.Queries.GetProductById;
+using Ecommerce.Application.Features.Products.Commands.PlaceOrder;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Ecommerce.WebApp.Server.Controllers.v1
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/products")]
     public class ProductController : BaseApiController
     {
@@ -99,6 +100,13 @@ namespace Ecommerce.WebApp.Server.Controllers.v1
             {
                 return Ok(await Mediator.Send(command));
             });
+        }
+
+        // POST: api/products/place-order
+        [HttpPost("place-order")]
+        public async Task<IActionResult> PlaceOrder(PlaceOrderCommand command)
+        {
+            return Ok(await Mediator.Send(command));
         }
     }
 }

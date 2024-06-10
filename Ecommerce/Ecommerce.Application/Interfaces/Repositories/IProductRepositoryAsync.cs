@@ -12,5 +12,6 @@ namespace Ecommerce.Application.Interfaces.Repositories
         Task<int> DeleteRangeAsync(List<int> ids);
         Task<PagedList<Product>> GetPagedProductsAsync(GetAllProductsParameter parameter);
         Task<List<Product>> GetProductsByIdsAsync(List<int> ids);
+        Task<int> PlaceOrderAsync(int productId, int quantity);
     }
 }
