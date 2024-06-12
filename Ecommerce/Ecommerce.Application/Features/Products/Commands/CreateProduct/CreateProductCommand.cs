@@ -5,6 +5,7 @@ using Ecommerce.Application.Wrappers;
 using Ecommerce.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 {
@@ -18,9 +19,9 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
     }
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Response<int>>
     {
-        private readonly IProductRepositoryAsync _productRepository;
+        private readonly IWriteProductRepositoryAsync _productRepository;
         private readonly IMapper _mapper;
-        public CreateProductCommandHandler(IProductRepositoryAsync productRepository, IMapper mapper)
+        public CreateProductCommandHandler(IWriteProductRepositoryAsync productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;

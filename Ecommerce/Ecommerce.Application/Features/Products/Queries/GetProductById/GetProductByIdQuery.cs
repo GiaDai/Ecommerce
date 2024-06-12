@@ -1,13 +1,10 @@
 ﻿using MediatR;
 using Ecommerce.Application.Exceptions;
-using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
 using Ecommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Queries.GetProductById
 {
@@ -16,8 +13,8 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProductById
         public int Id { get; set; }
         public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Response<Product>>
         {
-            private readonly IProductRepositoryAsync _productRepository;
-            public GetProductByIdQueryHandler(IProductRepositoryAsync productRepository)
+            private readonly IReadProductRepositoryAsync _productRepository;
+            public GetProductByIdQueryHandler(IReadProductRepositoryAsync productRepository)
             {
                 _productRepository = productRepository;
             }

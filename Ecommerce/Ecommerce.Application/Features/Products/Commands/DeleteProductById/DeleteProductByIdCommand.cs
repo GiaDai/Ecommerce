@@ -1,12 +1,9 @@
 ﻿using MediatR;
 using Ecommerce.Application.Exceptions;
-using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Commands.DeleteProductById
 {
@@ -15,16 +12,18 @@ namespace Ecommerce.Application.Features.Products.Commands.DeleteProductById
         public int Id { get; set; }
         public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, Response<int>>
         {
-            private readonly IProductRepositoryAsync _productRepository;
-            public DeleteProductByIdCommandHandler(IProductRepositoryAsync productRepository)
+            private readonly IWriteProductRepositoryAsync _writeProductRepository;
+            private readonly IReadProductRepositoryAsync _readProductRepository;
+            public DeleteProductByIdCommandHandler(IWriteProductRepositoryAsync writeProductRepository, IReadProductRepositoryAsync readProductRepository)
             {
-                _productRepository = productRepository;
+                _writeProductRepository = writeProductRepository;
+                _readProductRepository = readProductRepository;
             }
             public async Task<Response<int>> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
-                var product = await _productRepository.GetByIdAsync(command.Id);
+                var product = await _readProductRepository.GetByIdAsync(command.Id);
                 if (product == null) throw new ApiException($"Product Not Found.");
-                await _productRepository.DeleteAsync(product);
+                await _writeProductRepository.DeleteAsync(product);
                 return new Response<int>(product.Id);
             }
         }

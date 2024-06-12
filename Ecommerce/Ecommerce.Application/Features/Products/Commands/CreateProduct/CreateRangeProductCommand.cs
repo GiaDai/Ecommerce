@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 {
@@ -17,15 +17,21 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
         public class CreateRangeProductCommandHandler : IRequestHandler<CreateRangeProductCommand, Response<List<CreateRangeProductResponse>>>
         {
             private readonly IMapper _mapper;
-            private readonly IProductRepositoryAsync _productRepository;
-            public CreateRangeProductCommandHandler(IMapper mapper, IProductRepositoryAsync productRepository)
+            private readonly IWriteProductRepositoryAsync _writeProductRepository;
+            private readonly IReadProductRepositoryAsync _readProductRepository;
+            public CreateRangeProductCommandHandler(
+                IMapper mapper,
+                IReadProductRepositoryAsync readProductRepository,
+                IWriteProductRepositoryAsync productRepository
+                )
             {
                 _mapper = mapper;
-                _productRepository = productRepository;
+                _writeProductRepository = productRepository;
+                _readProductRepository = readProductRepository;
             }
             public async Task<Response<List<CreateRangeProductResponse>>> Handle(CreateRangeProductCommand request, CancellationToken cancellationToken)
             {
-                var validator = new CreateProductCommandValidator(_productRepository);
+                var validator = new CreateProductCommandValidator(_readProductRepository);
                 var productsResponse = new List<CreateRangeProductResponse>();
 
                 foreach (var product in request)
@@ -39,7 +45,7 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 
                 var validProducts = request.Where(product => productsResponse.All(productResponse => productResponse.Barcode != product.Barcode)).ToList();
                 var products = _mapper.Map<List<Product>>(validProducts);
-                await _productRepository.AddRangeAsync(products);
+                await _writeProductRepository.AddRangeAsync(products);
                 productsResponse.AddRange(validProducts.Select(product => new CreateRangeProductResponse
                 {
                     Barcode = product.Barcode,

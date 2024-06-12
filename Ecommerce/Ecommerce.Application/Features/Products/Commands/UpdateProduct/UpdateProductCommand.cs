@@ -1,12 +1,9 @@
 ﻿using MediatR;
 using Ecommerce.Application.Exceptions;
-using Ecommerce.Application.Interfaces.Repositories;
 using Ecommerce.Application.Wrappers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
 {
@@ -19,14 +16,19 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public decimal Price { get; set; }
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Response<int>>
         {
-            private readonly IProductRepositoryAsync _productRepository;
-            public UpdateProductCommandHandler(IProductRepositoryAsync productRepository)
+            private readonly IWriteProductRepositoryAsync _writeProductRepository;
+            private readonly IReadProductRepositoryAsync _readProductRepository;
+            public UpdateProductCommandHandler(
+                IWriteProductRepositoryAsync writeProductRepository,
+                IReadProductRepositoryAsync readProductRepository
+                )
             {
-                _productRepository = productRepository;
+                _writeProductRepository = writeProductRepository;
+                _readProductRepository = readProductRepository;
             }
             public async Task<Response<int>> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
             {
-                var product = await _productRepository.GetByIdAsync(command.Id);
+                var product = await _readProductRepository.GetByIdAsync(command.Id);
 
                 if (product == null)
                 {
@@ -38,7 +40,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                     product.Rate = command.Rate;
                     product.Description = command.Description;
                     product.Price = command.Price;
-                    await _productRepository.UpdateAsync(product);
+                    await _writeProductRepository.UpdateAsync(product);
                     return new Response<int>(product.Id);
                 }
             }

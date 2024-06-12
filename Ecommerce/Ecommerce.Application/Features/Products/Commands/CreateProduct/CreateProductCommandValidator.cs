@@ -2,14 +2,15 @@
 using Ecommerce.Application.Interfaces.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 {
     public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
     {
-        private readonly IProductRepositoryAsync productRepository;
+        private readonly IReadProductRepositoryAsync productRepository;
 
-        public CreateProductCommandValidator(IProductRepositoryAsync productRepository)
+        public CreateProductCommandValidator(IReadProductRepositoryAsync productRepository)
         {
             this.productRepository = productRepository;
 

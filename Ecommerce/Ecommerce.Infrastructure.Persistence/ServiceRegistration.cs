@@ -8,6 +8,9 @@ using Ecommerce.Infrastructure.Persistence.Repository;
 using Ecommerce.Infrastructure.Shared.Environments;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using Ecommerce.Application;
+using Ecommerce.Infrastructure.Persistence.Repositories.ProductCrqs;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 
 namespace Ecommerce.Infrastructure.Persistence
 {
@@ -122,7 +125,11 @@ namespace Ecommerce.Infrastructure.Persistence
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient(typeof(IGenericRepositoryBaseAsync<>), typeof(GenericRepositoryBaseAsync<>));
+            services.AddTransient(typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
+            services.AddTransient(typeof(IWriteRepositoryAsync<>), typeof(WriteRepositoryAsync<>));
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
+            services.AddTransient<IReadProductRepositoryAsync, ReadProductRepositoryAsync>();
+            services.AddTransient<IWriteProductRepositoryAsync, WriteProductRepositoryAsync>();
             services.AddTransient<IProductAttributeRepositoryAsync, ProductAttributeRepositoryAsync>();
             services.AddTransient<IProductAttributeMappingRepositoryAsync, ProductAttributeMappingRepositoryAsync>();
             services.AddTransient<IProductAttrValueRepositoryAsync, ProductAttrValueRepositoryAsync>();

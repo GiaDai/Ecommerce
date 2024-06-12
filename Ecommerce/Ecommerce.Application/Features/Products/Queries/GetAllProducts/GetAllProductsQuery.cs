@@ -5,6 +5,7 @@ using Ecommerce.Application.Wrappers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecommerce.Application.Interfaces.Repositories.ProductCrqs;
 namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts
 {
     public class GetAllProductsQuery : IRequest<Response<object>>
@@ -18,9 +19,9 @@ namespace Ecommerce.Application.Features.Products.Queries.GetAllProducts
     }
     public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, Response<object>>
     {
-        private readonly IProductRepositoryAsync _productRepository;
+        private readonly IReadProductRepositoryAsync _productRepository;
         private readonly IMapper _mapper;
-        public GetAllProductsQueryHandler(IProductRepositoryAsync productRepository, IMapper mapper)
+        public GetAllProductsQueryHandler(IReadProductRepositoryAsync productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
