@@ -18,7 +18,7 @@ namespace Ecommerce.Infrastructure.Shared.Environments
         }
         public string GetMySQLConnectionString()
         {
-            
+
             var isHasMySQLConnectionString = EnvironmentVariables.HasMySQLConnectionString();
             if (_env.IsProduction() && isHasMySQLConnectionString)
             {
@@ -26,7 +26,7 @@ namespace Ecommerce.Infrastructure.Shared.Environments
             }
             return _config.GetConnectionString("MySQLConnection");
         }
-
+        #region Postgres
         public string GetPostgresConnectionString()
         {
             var isHasPostgresConnectionString = EnvironmentVariables.HasPostgresConnectionString();
@@ -36,6 +36,28 @@ namespace Ecommerce.Infrastructure.Shared.Environments
             }
             return _config.GetConnectionString("PostgresConnection");
         }
+
+        public string GetPostgresReadConnString()
+        {
+            var isHasPostgresReadConnectionString = EnvironmentVariables.HasPostgresReadConnString();
+            if (_env.IsProduction() && isHasPostgresReadConnectionString)
+            {
+                return Environment.GetEnvironmentVariable(EnvironmentVariables.PostgresReadConnString);
+            }
+            return _config.GetConnectionString("PostgresReadConnection");
+        }
+
+        public string GetPostgresWriteConnString()
+        {
+            var isHasPostgresWriteConnectionString = EnvironmentVariables.HasPostgresWriteConnString();
+            if (_env.IsProduction() && isHasPostgresWriteConnectionString)
+            {
+                return Environment.GetEnvironmentVariable(EnvironmentVariables.PostgresWriteConnString);
+            }
+            return _config.GetConnectionString("PostgresWriteConnection");
+        }
+
+        #endregion
 
         public string GetSQLServerConnectionString()
         {

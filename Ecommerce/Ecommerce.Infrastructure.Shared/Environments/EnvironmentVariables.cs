@@ -8,6 +8,13 @@ namespace Ecommerce.Infrastructure.Shared.Environments
         #region Database
         public const string PostgresConnectionString = "POSTGRES_CONNECTION_STRING";
         public static bool HasPostgresConnectionString() => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(PostgresConnectionString));
+
+        public const string PostgresReadConnString = "POSTGRES_READ_CONN_STRING";
+        public static bool HasPostgresReadConnString() => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(PostgresReadConnString));
+
+        public const string PostgresWriteConnString = "POSTGRES_WRITE_CONN_STRING";
+        public static bool HasPostgresWriteConnString() => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(PostgresWriteConnString));
+
         public const string MySQLConnectionString = "MYSQL_CONNECTION_STRING";
         public static bool HasMySQLConnectionString() => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(MySQLConnectionString));
         public const string SQLServerConnectionString = "SQLSERVER_CONNECTION_STRING";

@@ -19,6 +19,7 @@ _services.AddApplicationLayer();
 _services.AddNpgSqlIdentityInfrastructure();
 _services.AddIdentityRepositories(_config);
 _services.AddNpgSqlPersistenceInfrastructure(typeof(Program).Assembly.FullName);
+_services.AddNpgSqlCQRSPersistenceInfrastructure(typeof(Program).Assembly.FullName);
 _services.AddPersistenceRepositories();
 _services.AddSharedInfrastructure(_config);
 if (_env.IsDevelopment())

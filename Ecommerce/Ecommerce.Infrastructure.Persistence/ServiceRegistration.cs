@@ -82,10 +82,46 @@ namespace Ecommerce.Infrastructure.Persistence
             }
         }
 
+        public static void AddNpgSqlCQRSPersistenceInfrastructure(this IServiceCollection services, string assembly)
+        {
+            // Build the intermediate service provider
+            var sp = services.BuildServiceProvider();
+            using (var scope = sp.CreateScope())
+            {
+                var _dbSetting = scope.ServiceProvider.GetRequiredService<IDatabaseSettingsProvider>();
+                string readConnStr = _dbSetting.GetPostgresReadConnString();
+                if (!string.IsNullOrWhiteSpace(readConnStr))
+                {
+                    services.AddDbContext<ReadDbContext>(options =>
+                    options.UseNpgsql(
+                    readConnStr,
+                    b =>
+                    {
+                        b.MigrationsAssembly(assembly);
+                        b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    }));
+                }
+
+                string writeConnStr = _dbSetting.GetPostgresWriteConnString();
+                if (!string.IsNullOrWhiteSpace(writeConnStr))
+                {
+                    services.AddDbContext<WriteDbContext>(options =>
+                    options.UseNpgsql(
+                    writeConnStr,
+                    b =>
+                    {
+                        b.MigrationsAssembly(assembly);
+                        b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    }));
+                }
+            }
+        }
+
         public static void AddPersistenceRepositories(this IServiceCollection services)
         {
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            services.AddTransient(typeof(IGenericRepositoryBaseAsync<>), typeof(GenericRepositoryBaseAsync<>));
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
             services.AddTransient<IProductAttributeRepositoryAsync, ProductAttributeRepositoryAsync>();
             services.AddTransient<IProductAttributeMappingRepositoryAsync, ProductAttributeMappingRepositoryAsync>();
