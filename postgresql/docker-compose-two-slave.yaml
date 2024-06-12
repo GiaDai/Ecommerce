@@ -1,0 +1,75 @@
+version: "3"
+services:
+  postgresql-master:
+    image: bitnami/postgresql
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresql_master_data:/bitnami/postgresql
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+    environment:
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_user
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=ecommerce
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  postgresql-slave1:
+    image: bitnami/postgresql
+    restart: always
+    ports:
+      - '5433:5432'
+    depends_on:
+      - postgresql-master
+    environment:
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_PGAUDIT_LOG=READ
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_user
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  postgresql-slave2:
+    image: bitnami/postgresql
+    restart: always
+    ports:
+      - '5434:5432'
+    depends_on:
+      - postgresql-master
+    environment:
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_PGAUDIT_LOG=READ
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_user
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  haproxy:
+    image: haproxy:latest
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - postgresql-master
+      - postgresql-slave1
+      - postgresql-slave2
+
+volumes:
+  postgresql_master_data:
+    driver: local
+  postgresql_slave1_data:
+    driver: local
+  postgresql_slave2_data:
+    driver: local
