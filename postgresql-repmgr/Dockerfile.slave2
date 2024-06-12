@@ -1,0 +1,2 @@
+FROM bitnami/postgresql-repmgr
+COPY ./config/repmgr/slave2-repmgr.conf /bitnami/repmgr.conf
