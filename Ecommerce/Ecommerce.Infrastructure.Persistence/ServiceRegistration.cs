@@ -8,6 +8,13 @@ using Ecommerce.Infrastructure.Persistence.Repository;
 using Ecommerce.Infrastructure.Shared.Environments;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Data.Common;
 
 namespace Ecommerce.Infrastructure.Persistence
 {
@@ -62,25 +69,35 @@ namespace Ecommerce.Infrastructure.Persistence
 
         public static void AddNpgSqlPersistenceInfrastructure(this IServiceCollection services, string assembly)
         {
-            // Build the intermediate service provider
-            var sp = services.BuildServiceProvider();
-            using (var scope = sp.CreateScope())
+            // Configure Redis Cache
+            var redisConnectionString = "localhost,password=redis"; // Redis connection string
+            services.AddStackExchangeRedisCache(options =>
             {
-                var _dbSetting = scope.ServiceProvider.GetRequiredService<IDatabaseSettingsProvider>();
+                options.Configuration = redisConnectionString;
+            });
+
+            // Configure DbContext
+            services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+            {
+                var _dbSetting = serviceProvider.GetRequiredService<IDatabaseSettingsProvider>();
                 string appConnStr = _dbSetting.GetPostgresConnectionString();
                 if (!string.IsNullOrWhiteSpace(appConnStr))
                 {
-                    services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(
-                    appConnStr,
-                    b =>
+                    options.UseNpgsql(appConnStr, b =>
                     {
                         b.MigrationsAssembly(assembly);
                         b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    }));
+                    });
+
+                    // Configure distributed cache
+                    var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    options.AddInterceptors(new CachingInterceptor(cache));
                 }
-            }
+            });
         }
+
+
 
         public static void AddPersistenceRepositories(this IServiceCollection services)
         {
@@ -91,6 +108,61 @@ namespace Ecommerce.Infrastructure.Persistence
             services.AddTransient<IProductAttributeMappingRepositoryAsync, ProductAttributeMappingRepositoryAsync>();
             services.AddTransient<IProductAttrValueRepositoryAsync, ProductAttrValueRepositoryAsync>();
             #endregion
+        }
+    }
+
+    public class CachingInterceptor : DbCommandInterceptor
+    {
+        private readonly IDistributedCache _cache;
+
+        public CachingInterceptor(IDistributedCache cache)
+        {
+            _cache = cache;
+        }
+
+        // Override methods to implement caching logic here
+        public override async ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<DbDataReader> result,
+            CancellationToken cancellationToken = default)
+        {
+            var cacheKey = GenerateCacheKey(command);
+            var cachedResult = await _cache.GetStringAsync(cacheKey, cancellationToken);
+
+            if (!string.IsNullOrEmpty(cachedResult))
+            {
+                // Deserialize the cached result and return it as a DbDataReader
+                var dbDataReader = DeserializeResult(cachedResult);
+                return InterceptionResult<DbDataReader>.SuppressWithResult(dbDataReader);
+            }
+            else
+            {
+                var dbResult = await base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
+                // Serialize the dbResult and cache it
+                await _cache.SetStringAsync(cacheKey, SerializeResult(dbResult.Result), cancellationToken);
+                return dbResult;
+            }
+        }
+
+        private string GenerateCacheKey(DbCommand command)
+        {
+            // Implement logic to generate a unique cache key based on the command
+            return command.CommandText; // Simplified for illustration
+        }
+
+        private string SerializeResult(DbDataReader result)
+        {
+            // Implement serialization logic
+            // This is a simplified example, you would need to properly serialize the reader's data
+            return "serialized_result";
+        }
+
+        private DbDataReader DeserializeResult(string cachedResult)
+        {
+            // Implement deserialization logic
+            // This is a simplified example, you would need to properly deserialize the cached data
+            return null;
         }
     }
 }
