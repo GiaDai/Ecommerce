@@ -70,11 +70,11 @@ namespace Ecommerce.Infrastructure.Persistence
         public static void AddNpgSqlPersistenceInfrastructure(this IServiceCollection services, string assembly)
         {
             // Configure Redis Cache
-            var redisConnectionString = "localhost,password=redis"; // Redis connection string
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = redisConnectionString;
-            });
+            // var redisConnectionString = "localhost,password=redis"; // Redis connection string
+            // services.AddStackExchangeRedisCache(options =>
+            // {
+            //     options.Configuration = redisConnectionString;
+            // });
 
             // Configure DbContext
             services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
@@ -90,9 +90,9 @@ namespace Ecommerce.Infrastructure.Persistence
                     });
 
                     // Configure distributed cache
-                    var cache = serviceProvider.GetRequiredService<IDistributedCache>();
-                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                    options.AddInterceptors(new CachingInterceptor(cache));
+                    // var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+                    // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    // options.AddInterceptors(new CachingInterceptor(cache));
                 }
             });
         }

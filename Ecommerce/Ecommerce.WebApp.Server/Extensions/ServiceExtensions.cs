@@ -4,6 +4,9 @@ using Ecommerce.Infrastructure.Shared.Environments;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using StackExchange.Redis;
 using CacheManager.Core;
+using CacheManager.Core.Internal;
+using Ecommerce.WebApp.Server.Services;
+using Ecommerce.Domain.Globals;
 
 namespace Ecommerce.WebApp.Server.Extensions
 {
@@ -73,33 +76,84 @@ namespace Ecommerce.WebApp.Server.Extensions
             {
                 var _redisSetting = scope.ServiceProvider.GetRequiredService<IRedisSettingsProvider>();
                 var redisConfig = _redisSetting.GetRedisConfiguration();
-                Console.WriteLine($"Redis Host: {redisConfig.Hosts[0].Host}");
-                Console.WriteLine($"Redis Port: {redisConfig.Hosts[0].Port}");
-                Console.WriteLine($"Redis Password: {redisConfig.Password}");
 
-                services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfig);
+                // Kiểm tra kết nối đến Redis
+                try
+                {
+                    var redis = ConnectionMultiplexer.Connect(redisConfig.ConfigurationOptions);
+                    if (redis.IsConnected)
+                    {
+                        Console.WriteLine($"Connected to Redis Server, {redisConfig.ConfigurationOptions}");
 
-                // Add code to check connection to Redis server
-                var redis = ConnectionMultiplexer.Connect(redisConfig.ConfigurationOptions);
-                // Add code to check connection to Redis server
-                var connection = ConnectionMultiplexer.Connect("localhost,password=redis");
-                if (connection.IsConnected)
-                {
-                    Console.WriteLine("Connected to Redis Server");
+                        // Đăng ký Redis cache
+                        services.AddStackExchangeRedisCache(options =>
+                        {
+                            options.Configuration = redisConfig.ConfigurationOptions.ToString();
+                        });
+
+                        // Đăng ký IConnectionMultiplexer
+                        services.AddSingleton<IConnectionMultiplexer>(sp =>
+                            ConnectionMultiplexer.Connect(redisConfig.ConfigurationOptions));
+                        redis.ConnectionFailed += (s, e) =>
+                        {
+                            RedisConnectionMonitor.IsRedisConnected = false;
+                            Console.WriteLine("Redis connection failed.");
+                            // Log lỗi kết nối Redis vào hệ thống log chính của bạn nếu cần thiết
+                        };
+                        redis.ConnectionRestored += (s, e) =>
+                        {
+                            RedisConnectionMonitor.IsRedisConnected = true;
+                            Console.WriteLine("Redis connection restored.");
+                            // Log lỗi kết nối Redis vào hệ thống log chính của bạn nếu cần thiết
+                        };
+                        // Đăng ký RedisConnectionChecker
+                        // services.AddSingleton<RedisConnectionChecker>();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to connect to Redis Server");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Failed to connect to Redis Server");
+                    Console.WriteLine($"Failed to connect to Redis Server: {ex.Message}");
+                    // Log lỗi kết nối Redis vào hệ thống log chính của bạn nếu cần thiết
                 }
-                // var server = redis.GetServer(redisConfig.ConfigurationOptions.EndPoints.First());
-                // if (server.IsConnected)
-                // {
-                //     Console.WriteLine("Connected to Redis Server");
-                // }
-                // else
-                // {
-                //     Console.WriteLine("Failed to connect to Redis Server");
-                // }
+            }
+        }
+
+
+        public static void AddCacheManagerExtension(this IServiceCollection services)
+        {
+            var sp = services.BuildServiceProvider();
+            using (var scope = sp.CreateScope())
+            {
+                var _redisSetting = scope.ServiceProvider.GetRequiredService<IRedisSettingsProvider>();
+                var redisConfig = _redisSetting.GetRedisConfiguration();
+
+                var cacheManagerConfiguration = CacheManager.Core.ConfigurationBuilder.BuildConfiguration(settings =>
+                {
+                    settings
+                        .WithJsonSerializer() // Thiết lập JSON serializer cho CacheManager.
+                        .WithUpdateMode(CacheUpdateMode.Up)
+                        .WithMaxRetries(1000)
+                        .WithRetryTimeout(100)
+                        .WithRedisConfiguration("redis", config => //Cấu hình Redis sử dụng RedisConfigurationBuilder
+                        {
+                            config.WithAllowAdmin() //Cho phép các lệnh quản trị Redis.
+                                .WithDatabase(0) //Sử dụng database số 0 trong Redis.
+                                .WithEndpoint( //Thiết lập endpoint Redis
+                                    redisConfig.Hosts[0].Host.ToString(),
+                                    int.Parse(redisConfig.Hosts[0].Port.ToString())
+                                )
+                                .WithPassword(redisConfig.Password); // Nếu Redis của bạn có password, nếu không thì bỏ qua dòng này
+                        })
+                        .WithHandle(typeof(DictionaryCacheHandle<>)) //Sử dụng Dictionary cache handle.
+                        .WithExpiration(ExpirationMode.Absolute, TimeSpan.FromMinutes(10)); //Thiết lập chế độ hết hạn là tuyệt đối và thời gian hết hạn là 10 phút.
+                });
+
+                services.AddSingleton(typeof(ICacheManagerConfiguration), cacheManagerConfiguration);
+                services.AddSingleton(typeof(ICacheManager<>), typeof(BaseCacheManager<>));
             }
         }
 
