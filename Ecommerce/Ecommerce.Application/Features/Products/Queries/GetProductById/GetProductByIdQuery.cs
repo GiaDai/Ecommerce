@@ -82,10 +82,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProductById
                 if (product != null && RedisConnectionMonitor.IsRedisConnected)
                 {
                     var jsonProduct = JsonConvert.SerializeObject(product);
-                    var options = new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-                    };
+                    var options = CacheOptionsUtility.GetDefaultCacheEntryOptions();
 
                     try
                     {

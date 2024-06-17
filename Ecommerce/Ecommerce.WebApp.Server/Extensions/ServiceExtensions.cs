@@ -104,6 +104,8 @@ namespace Ecommerce.WebApp.Server.Extensions
                         {
                             RedisConnectionMonitor.IsRedisConnected = true;
                             Console.WriteLine("Redis connection restored.");
+                            var subscriber = redis.GetSubscriber();
+                            subscriber.Publish("product-refresh", "true");
                             // Log lỗi kết nối Redis vào hệ thống log chính của bạn nếu cần thiết
                         };
                         // Đăng ký RedisConnectionChecker

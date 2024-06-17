@@ -19,8 +19,11 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public decimal Price { get; set; }
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Response<int>>
         {
+            private readonly IMediator _mediator;
             private readonly IProductRepositoryAsync _productRepository;
-            public UpdateProductCommandHandler(IProductRepositoryAsync productRepository)
+            public UpdateProductCommandHandler(
+                IMediator mediator,
+                IProductRepositoryAsync productRepository)
             {
                 _productRepository = productRepository;
             }
@@ -39,6 +42,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                     product.Description = command.Description;
                     product.Price = command.Price;
                     await _productRepository.UpdateAsync(product);
+                    await _mediator.Publish(new UpdatedProductEvent { Product = product }, cancellationToken);
                     return new Response<int>(product.Id);
                 }
             }

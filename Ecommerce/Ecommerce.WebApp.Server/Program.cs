@@ -13,7 +13,9 @@ var _services = builder.Services;
 var _env = builder.Environment;
 // Add services to the container.
 
+
 _services.AddEnvironmentVariablesExtension();
+_services.AddRedisCacheExtension();
 _services.AddIdentityLayer();
 _services.AddApplicationLayer();
 _services.AddNpgSqlIdentityInfrastructure();
@@ -21,7 +23,7 @@ _services.AddIdentityRepositories(_config);
 _services.AddNpgSqlPersistenceInfrastructure(typeof(Program).Assembly.FullName);
 _services.AddPersistenceRepositories();
 _services.AddSharedInfrastructure(_config);
-_services.AddRedisCacheExtension();
+
 if (_env.IsDevelopment())
 {
     _services.AddSwaggerExtension();
@@ -33,6 +35,7 @@ _services.AddHealthChecks();
 _services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 _services.AddHttpClient();
 _services.AddSingleton<IHostedService, RecureHostedService>();
+_services.AddSingleton<IHostedService, ProductRedisSubscriber>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 _services.AddEndpointsApiExplorer();
 
