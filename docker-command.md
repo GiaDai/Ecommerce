@@ -28,7 +28,7 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=sql@pa22w0rd" -p 1433:1433 -d --na
 
 docker run -d --name rabbitmq --network ecommerce -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=ecommerce -e RABBITMQ_DEFAULT_PASS=123456789 -e RABBITMQ_MEMORY_HIGH_WATERMARK=0.7 -e RABBITMQ_DISK_FREE_LIMIT=500MB -e RABBITMQ_CONSUMER_TIMEOUT=300000 --cpus="2" --memory="2g" rabbitmq:3-management
 
-docker run -d -p 56379:6379 -h redis -e REDIS_PASSWORD=redis --network ecommerce --name redis --restart always redis /bin/sh -c 'redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}'
+docker run -d -p 6379:6379 -h redis -e REDIS_PASSWORD=redis --network ecommerce --name redis --restart always redis /bin/sh -c 'redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}'
 
 git rm --cached Ecommerce/Ecommerce.WebApp.Client/Ecommerce.WebApp.Client.esproj
 git rm --cached ./Ecommerce/Ecommerce.WebApp.Client/Ecommerce.WebApp.Client.esproj
