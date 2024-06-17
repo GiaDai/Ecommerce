@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Ecommerce.Infrastructure.Shared.Environments;
+using StackExchange.Redis.Extensions.Newtonsoft;
+using StackExchange.Redis;
+using CacheManager.Core;
 
 namespace Ecommerce.WebApp.Server.Extensions
 {
@@ -61,6 +64,43 @@ namespace Ecommerce.WebApp.Server.Extensions
                 // Advertise the API versions supported for the particular endpoint
                 config.ReportApiVersions = true;
             });
+        }
+
+        public static void AddRedisCacheExtension(this IServiceCollection services)
+        {
+            var sp = services.BuildServiceProvider();
+            using (var scope = sp.CreateScope())
+            {
+                var _redisSetting = scope.ServiceProvider.GetRequiredService<IRedisSettingsProvider>();
+                var redisConfig = _redisSetting.GetRedisConfiguration();
+                Console.WriteLine($"Redis Host: {redisConfig.Hosts[0].Host}");
+                Console.WriteLine($"Redis Port: {redisConfig.Hosts[0].Port}");
+                Console.WriteLine($"Redis Password: {redisConfig.Password}");
+
+                services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfig);
+
+                // Add code to check connection to Redis server
+                var redis = ConnectionMultiplexer.Connect(redisConfig.ConfigurationOptions);
+                // Add code to check connection to Redis server
+                var connection = ConnectionMultiplexer.Connect("localhost,password=redis");
+                if (connection.IsConnected)
+                {
+                    Console.WriteLine("Connected to Redis Server");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to connect to Redis Server");
+                }
+                // var server = redis.GetServer(redisConfig.ConfigurationOptions.EndPoints.First());
+                // if (server.IsConnected)
+                // {
+                //     Console.WriteLine("Connected to Redis Server");
+                // }
+                // else
+                // {
+                //     Console.WriteLine("Failed to connect to Redis Server");
+                // }
+            }
         }
 
         public static void AddEnvironmentVariablesExtension(this IServiceCollection services)

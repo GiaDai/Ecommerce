@@ -21,6 +21,7 @@ _services.AddIdentityRepositories(_config);
 _services.AddNpgSqlPersistenceInfrastructure(typeof(Program).Assembly.FullName);
 _services.AddPersistenceRepositories();
 _services.AddSharedInfrastructure(_config);
+_services.AddRedisCacheExtension();
 if (_env.IsDevelopment())
 {
     _services.AddSwaggerExtension();
