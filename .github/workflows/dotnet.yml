@@ -37,4 +37,10 @@ jobs:
       
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest
+        retries=3
+        until [ $retries -le 0 ]; do
+          docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest && break
+          retries=$((retries - 1))
+          echo "Retrying in 10 seconds..."
+          sleep 10
+        done
