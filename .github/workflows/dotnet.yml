@@ -25,11 +25,18 @@ jobs:
     - name: Build
       run: dotnet build Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj --no-restore
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Retryable Docker login
+      id: docker_login
+      run: |
+        retries=3
+        until [ $retries -le 0 ]; do
+          echo "Logging into Docker Hub..."
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin && break
+          retries=$((retries - 1))
+          echo "Retrying Docker login in 10 seconds..."
+          sleep 10
+        done
+      shell: bash
         
     - name: Build and tag Docker image
       run: |
