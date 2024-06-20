@@ -21,6 +21,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore Ecommerce/Ecommerce.WebApp.Server.csproj
+      run: dotnet restore Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj
     - name: Build
-      run: dotnet build Ecommerce/Ecommerce.WebApp.Server.csproj --no-restore
+      run: dotnet build Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj --no-restore
