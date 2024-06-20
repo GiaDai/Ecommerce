@@ -38,16 +38,12 @@ jobs:
         done
       shell: bash
         
-    - name: Build and tag Docker image
-      run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest -f Ecommerce/Ecommerce.WebApp.Server/Dockerfile .
-      
-    - name: Push Docker image to Docker Hub
-      run: |
-        retries=3
-        until [ $retries -le 0 ]; do
-          docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest && break
-          retries=$((retries - 1))
-          echo "Retrying in 10 seconds..."
-          sleep 10
-        done
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: Ecommerce/Ecommerce.WebApp.Server/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest
+        retries: 3
+        retry-delay: 10s
