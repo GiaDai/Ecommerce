@@ -41,8 +41,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: Ecommerce/Ecommerce.WebApp.Razor/Dockerfile
+          context: Ecommerce
+          file: Ecommerce.WebApp.Razor/Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
