@@ -5,60 +5,57 @@ name: Ecommerce .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj
-    - name: Build
-      run: dotnet build Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj --no-restore
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj
+      - name: Build
+        run: dotnet build Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj --no-restore
 
-    # - name: Retryable Docker login
-    #   id: docker_login
-    #   run: |
-    #     retries=3
-    #     until [ $retries -le 0 ]; do
-    #       echo "Logging into Docker Hub..."
-    #       echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin && break
-    #       retries=$((retries - 1))
-    #       echo "Retrying Docker login in 10 seconds..."
-    #       sleep 10
-    #     done
-    #   shell: bash
+      # - name: Retryable Docker login
+      #   id: docker_login
+      #   run: |
+      #     retries=3
+      #     until [ $retries -le 0 ]; do
+      #       echo "Logging into Docker Hub..."
+      #       echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin && break
+      #       retries=$((retries - 1))
+      #       echo "Retrying Docker login in 10 seconds..."
+      #       sleep 10
+      #     done
+      #   shell: bash
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      
-    - name: Configure Docker credential helper
-      run: |
-        mkdir -p ~/.docker
-        echo '{ "credsStore": "secretservice" }' > ~/.docker/config.json
+      # Set up BuildKit Docker container builder to be able to build
+      # multi-platform images and export cache
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
 
-    - name: Log into Docker Hub
-      uses: docker/login-action@v2
-      with:
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: Ecommerce/Ecommerce.WebApp.Server/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest
-        retries: 3
-        retry-delay: 10s
+      - name: Log into Docker Hub
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Ecommerce/Ecommerce.WebApp.Server/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest
+          retries: 3
+          retry-delay: 10s
