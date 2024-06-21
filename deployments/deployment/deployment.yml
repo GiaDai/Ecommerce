@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce
+  namespace: ecommerce
+  labels:
+    app: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce
+  template:
+    metadata:
+      labels:
+        app: ecommerce
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: ecommerce-config
+          valueFrom:
+            secretKeyRef:
+              name: ecommerce-secret
+              key: DB_POSTGRES_USER
+            secretKeyRef:
+              name: ecommerce-secret
+              key: DB_POSTGRES_PASSWORD
+#kubectl apply -f deployment.yml
+#kubectl delete deployment ecommerce -n ecommerce
+
+# delete deployment
+# kubectl delete deployment ecommerce -n ecommerce

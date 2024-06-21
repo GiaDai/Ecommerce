@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ecommerce
+  labels:
+    name: ecommerce
+# kubectl apply -f ecommerce.yml
+# kubectl delete ecommerce
+
+#kubectl config set-context --current --namespace=ecommerce
+#kubectl get all --namespace ecommerce
+#kubectl get all -n ecommerce

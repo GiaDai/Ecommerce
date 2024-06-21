@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce
+  namespace: ecommerce
+  labels:
+    app: ecommerce
+spec:
+  selector:
+    app: ecommerce
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+#kubectl apply -f service.yml
+#kubectl delete service ecommerce -n ecommerce
+# minikube tunnel //Minikube sẽ tạo ra một IP có thể truy cập được từ bên ngoài
+
+# delete service
+# kubectl delete service ecommerce -n ecommerce
