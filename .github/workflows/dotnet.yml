@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: Ecommerce .NET
+name: Ecommerce.WebApp.Razor .NET
 
 on:
   push:
@@ -20,9 +20,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore dependencies
-        run: dotnet restore Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj
+        run: dotnet restore Ecommerce/Ecommerce.WebApp.Razor/Ecommerce.WebApp.Razor.csproj
       - name: Build
-        run: dotnet build Ecommerce/Ecommerce.WebApp.Server/Ecommerce.WebApp.Server.csproj --no-restore
+        run: dotnet build Ecommerce/Ecommerce.WebApp.Razor/Ecommerce.WebApp.Razor.csproj --no-restore
 
       # - name: Retryable Docker login
       #   id: docker_login
@@ -54,8 +54,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Ecommerce/Ecommerce.WebApp.Server/Dockerfile
+          file: Ecommerce/Ecommerce.WebApp.Razor/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-server:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-razor:latest
           retries: 3
           retry-delay: 10s
