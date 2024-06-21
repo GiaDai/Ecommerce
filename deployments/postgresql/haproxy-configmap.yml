@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+  namespace: ecommerce
+data:
+  haproxy.cfg: |
+    global
+      log stdout format raw local0
+      maxconn 4096
+
+    defaults
+      log     global
+      mode    tcp
+      option  tcplog
+      option  dontlognull
+      retries 3
+      timeout connect 5000ms
+      timeout client  50000ms
+      timeout server  50000ms
+
+    frontend psql_frontend
+      bind *:5432
+      default_backend psql_backend
+
+    backend psql_backend
+      mode tcp
+      option pgsql-check user haproxy_check_user
+      balance roundrobin
+      server slave1 postgresql-slave:5432 check
+      server slave2 postgresql-slave:5432 check

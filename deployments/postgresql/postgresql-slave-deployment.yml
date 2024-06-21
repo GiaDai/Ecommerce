@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-slave
+  namespace: ecommerce
+  labels:
+    app: postgresql
+    role: slave
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: postgresql
+      role: slave
+  template:
+    metadata:
+      labels:
+        app: postgresql
+        role: slave
+    spec:
+      containers:
+        - name: postgresql-slave
+          image: bitnami/postgresql
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: "slave"
+            - name: POSTGRESQL_MASTER_HOST
+              value: "postgresql-master"
+            - name: POSTGRESQL_REPLICATION_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secret
+                  key: POSTGRESQL_REPLICATION_PASSWORD
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secret
+                  key: POSTGRESQL_REPLICATION_PASSWORD
+            - name: POSTGRESQL_MASTER_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secret
+                  key: POSTGRESQL_PASSWORD
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          volumeMounts:
+            - name: postgresql-slave-data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: postgresql-slave-data
+          emptyDir: {}
