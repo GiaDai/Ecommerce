@@ -1,4 +1,4 @@
-name: Ecommerce.WebApp.Razor .NET
+name: FrontEnd.Ecommerce .NET
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-razor
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/fe.ecommerce
 
 jobs:
   build:
