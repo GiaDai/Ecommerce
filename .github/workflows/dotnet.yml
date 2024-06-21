@@ -62,8 +62,8 @@ jobs:
       - name: Set up kubectl
         if: github.event_name != 'pull_request'
         run: |
-        mkdir -p $HOME/.kube
-        echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
         if: github.event_name != 'pull_request'
