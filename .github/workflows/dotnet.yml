@@ -67,8 +67,8 @@ jobs:
         echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
-      if: github.event_name != 'pull_request'
-        run: |
-          kubectl apply -f deployments/webapp-razor/service.yaml
-          kubectl set image deployment/web-ecommerce web-ecommerce=${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-razor:latest
-          kubectl rollout status deployment/web-ecommerce
+        if: github.event_name != 'pull_request'
+          run: |
+            kubectl apply -f deployments/webapp-razor/service.yaml
+            kubectl set image deployment/web-ecommerce web-ecommerce=${{ secrets.DOCKER_USERNAME }}/ecommerce-webapp-razor:latest
+            kubectl rollout status deployment/web-ecommerce
