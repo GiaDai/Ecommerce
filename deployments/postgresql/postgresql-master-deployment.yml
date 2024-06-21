@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-master
+  namespace: ecommerce
+  labels:
+    app: postgresql
+    role: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+      role: master
+  template:
+    metadata:
+      labels:
+        app: postgresql
+        role: master
+    spec:
+      containers:
+        - name: postgresql
+          image: bitnami/postgresql
+          env:
+            - name: POSTGRESQL_PGAUDIT_LOG
+              value: "READ,WRITE"
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "true"
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: "master"
+            - name: POSTGRESQL_REPLICATION_USER
+              value: "repl_user"
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              value: "repl_user"
+            - name: POSTGRESQL_USERNAME
+              value: "postgres"
+            - name: POSTGRESQL_PASSWORD
+              value: "postgres"
+            - name: POSTGRESQL_DATABASE
+              value: "ecommerce"
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgresql-master-data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: postgresql-master-data
+          persistentVolumeClaim:
+            claimName: postgresql-master-pvc
