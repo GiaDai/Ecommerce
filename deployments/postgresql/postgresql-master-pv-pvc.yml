@@ -5,7 +5,7 @@ metadata:
   namespace: ecommerce
 spec:
   capacity:
-    storage: 10Gi
+    storage: 200Mi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -23,4 +23,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 200Mi
