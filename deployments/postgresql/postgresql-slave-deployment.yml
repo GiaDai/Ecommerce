@@ -18,6 +18,8 @@ spec:
         app: postgresql
         role: slave
     spec:
+      securityContext:
+        fsGroup: 1001
       containers:
         - name: postgresql-slave
           image: bitnami/postgresql
