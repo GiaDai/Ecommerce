@@ -5,7 +5,7 @@ dotnet ef dbcontext list
 dotnet ef migrations add InitialCreate --context ApplicationDbContext
 dotnet ef migrations add InitialCreate --context IdentityContext
 
-docker build -f Ecommerce/Ecommerce.WebApp.Server/Dockerfile -t onion.clean:v.0.1 .
+docker build -f Ecommerce/Ecommerce.WebApp.Server/Dockerfile -t be.ecommerce:v.0.1 .
 
 dotnet ef migrations add InitialIdentiy --context IdentityContext -o ../Ecommerce.Infrastructure.Identity/Migrations
 dotnet ef migrations add InitialProductTable --context ApplicationDbContext
