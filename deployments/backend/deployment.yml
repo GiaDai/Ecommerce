@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: be-ecommerce
+  namespace: ecommerce
+  labels:
+    app: be-ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: be-ecommerce
+  template:
+    metadata:
+      labels:
+        app: be-ecommerce
+    spec:
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: be-ecommerce
+          image: giabaodocker/be-ecommerce:lastest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: POSTGRES_CONNECTION_STRING
+              value: "Host=postgresql-master;Database=ecommerce;Username=postgres;Password=postgres"
+            - name: CLOUDINARY_URL
+              value: "cloudinary://853652539285151:35dgbXUNu7U4_zye8KiQkR5GagA@hqxqmqmoo"
+          # env:
+          #   - name: POSTGRES_CONNECTION_STRING
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: be-ecommerce-secret
+          #         key: POSTGRES_CONNECTION_STRING
+          #   - name: CLOUDINARY_URL
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: be-ecommerce-secret
+          #         key: CLOUDINARY_URL
+          volumeMounts:
+            - name: be-ecommerce-volume
+              mountPath: /app/wwwroot/policy.csv
+              subPath: policy.csv
+            - name: be-ecommerce-volume
+              mountPath: /app/wwwroot/model.conf
+              subPath: model.conf
+      volumes:
+        - name: be-ecommerce-volume
+          configMap:
+            name: be-ecommerce-config
