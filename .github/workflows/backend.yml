@@ -65,4 +65,4 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           kubectl set image deployment/be-ecommerce -n ecommerce be-ecommerce=${{ env.IMAGE_NAME }}:latest
-          kubectl rollout status deployment/be-ecommerce -n ecommerce
+          kubectl rollout restart deployment/be-ecommerce -n ecommerce
