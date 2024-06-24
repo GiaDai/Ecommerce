@@ -2,9 +2,9 @@ name: FrontEnd.Ecommerce .NET
 
 on:
   push:
-    branches: ["main"]
+    branches: ["frontend"]
   pull_request:
-    branches: ["main"]
+    branches: ["frontend"]
 
 env:
   REGISTRY: docker.io
