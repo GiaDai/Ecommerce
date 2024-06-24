@@ -19,7 +19,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: be-ecommerce
-          image: giabaodocker/be-ecommerce:lastest
+          image: giabaodocker/be.ecommerce:lastest
           ports:
             - containerPort: 8081
           env:
