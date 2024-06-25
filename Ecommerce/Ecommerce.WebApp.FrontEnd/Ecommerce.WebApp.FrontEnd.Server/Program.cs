@@ -1,13 +1,16 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var _config = builder.Configuration;
+var _services = builder.Services;
+var _env = builder.Environment;
 // Add services to the container.
 
-builder.Services.AddControllers();
+_services.AddControllers();
+_services.AddHealthChecks();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+_services.AddEndpointsApiExplorer();
+_services.AddSwaggerGen();
 
 var app = builder.Build();
 
