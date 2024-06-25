@@ -7,6 +7,7 @@ using Ecommerce.WebApp.Server.Extensions;
 using Ecommerce.WebApp.Server.HostedService;
 using Ecommerce.WebApp.Server.Initializer;
 using Ecommerce.WebApp.Server.Services;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
 var _services = builder.Services;
@@ -65,6 +66,11 @@ app.UseAuthorization();
 
 app.UseErrorHandlingMiddleware();
 app.UseHealthChecks("/health");
+// config readliness check with path /ready
+app.UseHealthChecks("/ready", new HealthCheckOptions()
+{
+    Predicate = (check) => check.Name == "readiness"
+});
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
