@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-ecommerce
+  namespace: ecommerce
+  labels:
+    app: web-ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-ecommerce
+  template:
+    metadata:
+      labels:
+        app: web-ecommerce
+    spec:
+      containers:
+        - name: web-ecommerce
+          image: giabaodocker/webapp.net:v.0
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            #  Kiểm tra điểm cuối /healthz của ứng dụng web trên cổng 8081.
+            #Nếu điểm cuối này không phản hồi (hoặc phản hồi với trạng thái khác 2xx hoặc 3xx), Kubernetes sẽ khởi động lại container.
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 60
+            # Thời gian chờ trước khi thực hiện probe lần đầu tiên.
+            periodSeconds: 10
+            # Thời gian giữa các lần kiểm tra tiếp theo.
+          readinessProbe:
+            # Kiểm tra điểm cuối /ready của ứng dụng web trên cổng 8081.
+            # Nếu điểm cuối này không phản hồi, container sẽ được coi là chưa sẵn sàng và sẽ không nhận lưu lượng.
+            httpGet:
+              path: /ready
+              port: 8081
+            initialDelaySeconds: 30
+            # Thời gian chờ trước khi thực hiện probe lần đầu tiên.
+            periodSeconds: 10
+            # Thời gian giữa các lần kiểm tra tiếp theo.
