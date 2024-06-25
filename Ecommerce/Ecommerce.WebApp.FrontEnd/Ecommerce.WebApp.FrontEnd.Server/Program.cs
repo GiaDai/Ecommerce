@@ -25,9 +25,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseHealthChecks("/health");
-app.UseHealthChecks("ready", new HealthCheckOptions
+// config readliness check with path /ready
+app.UseHealthChecks("/ready", new HealthCheckOptions()
 {
-    Predicate = check => check.Name == "readiness"
+    Predicate = (check) => check.Name == "readiness"
 });
 app.MapControllers();
 
