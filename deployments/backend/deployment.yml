@@ -69,11 +69,3 @@ spec:
         - name: be-ecommerce-volume
           configMap:
             name: be-ecommerce-config
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
-  rollbackTo:
-    revision: 1 # Rollback to the previous revision
-

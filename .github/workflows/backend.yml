@@ -68,22 +68,20 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           kubectl set image deployment/be-ecommerce -n ecommerce be-ecommerce=${{ env.IMAGE_NAME }}:${{ github.sha }}
-          kubectl rollout restart deployment/be-ecommerce -n ecommerce
       # livenessProbe và readinessProbe là hai loại probes trong Kubernetes giúp kiểm tra sức khỏe của các containers trong Pods.
       # Chúng giúp Kubernetes quản lý và duy trì trạng thái của các ứng dụng.
       # Liveness Probe: Kiểm tra xem container có đang hoạt động hay không. Nếu container không hoạt động, Kubernetes sẽ khởi động lại container đó.
       # Readiness Probe: Kiểm tra xem container có sẵn sàng để phục vụ requests hay không. Nếu container không sẵn sàng, Kubernetes sẽ không gửi traffic đến container đó.
-      - name: Monitor deployment status and rollback if necessary
+      - name: Monitor Deployment rollout
         if: github.event_name != 'pull_request'
         run: |
-          sleep 30s  # Wait for deployment to start up
-          kubectl rollout status deployment/be-ecommerce -n ecommerce
+          kubectl rollout restart deployment/be-ecommerce -n ecommerce
 
-          # Check rollout status
-          rollout_status=$?
-          if [ $rollout_status -ne 0 ]; then
-            echo "Rollout failed or timed out. Rolling back deployment..."
+      - name: Rollback if Deployment fails
+        if: github.event_name != 'pull_request'
+        run: |
+          if ! kubectl rollout status deployment/be-ecommerce -n ecommerce --timeout=5m; then
+            echo "Deployment failed, rolling back"
             kubectl rollout undo deployment/be-ecommerce -n ecommerce
-          else
-            echo "Rollout successful."
+            exit 1
           fi
