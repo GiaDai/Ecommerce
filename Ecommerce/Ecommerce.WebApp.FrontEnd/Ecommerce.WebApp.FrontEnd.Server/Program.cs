@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,7 +24,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseHealthChecks("/health");
+app.UseHealthChecks("ready", new HealthCheckOptions
+{
+    Predicate = check => check.Name == "readiness"
+});
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");

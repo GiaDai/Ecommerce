@@ -44,7 +44,9 @@ jobs:
           context: .
           file: Ecommerce/Ecommerce.WebApp.FrontEnd/Ecommerce.WebApp.FrontEnd.Server/Dockerfile
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -57,11 +59,28 @@ jobs:
       - name: Apply Kubernetes manifests
         if: github.event_name != 'pull_request'
         run: |
-          kubectl apply -f deployments/webapp-razor/deployment.yml
-          kubectl apply -f deployments/webapp-razor/service.yml
+          kubectl apply -f deployments/frontend/deployment.yml
+          kubectl apply -f deployments/frontend/service.yml
 
       - name: Update Kubernetes Deployment image
         if: github.event_name != 'pull_request'
         run: |
-          kubectl set image deployment/web-ecommerce -n ecommerce web-ecommerce=${{ env.IMAGE_NAME }}:latest
+          kubectl set image deployment/web-ecommerce -n ecommerce web-ecommerce=${{ env.IMAGE_NAME }}:${{ github.sha }}
           kubectl rollout status deployment/web-ecommerce -n ecommerce
+      # livenessProbe và readinessProbe là hai loại probes trong Kubernetes giúp kiểm tra sức khỏe của các containers trong Pods.
+      # Chúng giúp Kubernetes quản lý và duy trì trạng thái của các ứng dụng.
+      # Liveness Probe: Kiểm tra xem container có đang hoạt động hay không. Nếu container không hoạt động, Kubernetes sẽ khởi động lại container đó.
+      # Readiness Probe: Kiểm tra xem container có sẵn sàng để phục vụ requests hay không. Nếu container không sẵn sàng, Kubernetes sẽ không gửi traffic đến container đó.
+      - name: Monitor Deployment rollout
+        if: github.event_name != 'pull_request'
+        run: |
+          kubectl rollout restart deployment/web-ecommerce -n ecommerce
+
+      - name: Rollback if Deployment fails
+        if: github.event_name != 'pull_request'
+        run: |
+          if ! kubectl rollout status deployment/web-ecommerce -n ecommerce --timeout=5m; then
+            echo "Deployment failed, rolling back"
+            kubectl rollout undo deployment/web-ecommerce -n ecommerce
+            exit 1
+          fi
