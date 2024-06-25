@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Ecommerce.Infrastructure.Identity\Ecommerce.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\..\Ecommerce.Infrastructure.Persistence\Ecommerce.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\ecommerce.webapp.frontend.client\ecommerce.webapp.frontend.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
