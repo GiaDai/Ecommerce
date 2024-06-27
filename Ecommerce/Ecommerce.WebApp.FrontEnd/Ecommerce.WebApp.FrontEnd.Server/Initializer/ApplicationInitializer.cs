@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Ecommerce.Infrastructure.Identity.Contexts;
-using Ecommerce.Infrastructure.Identity.Models;
-using Ecommerce.Infrastructure.Persistence.Contexts;
-using Serilog;
+﻿using Serilog;
 
 namespace Ecommerce.WebApp.FrontEnd.Server.Initializer
 {

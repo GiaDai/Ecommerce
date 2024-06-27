@@ -6,6 +6,7 @@ using Ecommerce.Application.Features.ProductAttrs.Queries.GetPagingProductAttrs;
 using Ecommerce.Application.Features.ProductAttrVals.Commands.CreateProdAttrVal;
 using Ecommerce.Application.Features.ProductAttrVals.Queries.GetPagingProductAttrVals;
 using Ecommerce.Application.Features.Products.Commands.CreateProduct;
+using Ecommerce.Application.Features.Products.Queries.Fe.FeGetPagingProducts;
 using Ecommerce.Application.Features.Products.Queries.GetAllProducts;
 using Ecommerce.Domain.Entities;
 
@@ -18,6 +19,8 @@ namespace Ecommerce.Application.Mappings
             CreateMap<Product, GetAllProductsViewModel>().ReverseMap();
             CreateMap<CreateProductCommand, Product>();
             CreateMap<GetAllProductsQuery, GetAllProductsParameter>();
+            CreateMap<FeGetPagingProductsQuery, FeGetPagingProductsParameter>();
+            CreateMap<FeGetPagingProductsParameter, GetAllProductsParameter>().ReverseMap();
 
             CreateMap<CreateProductAttrCommand, ProductAttribute>();
             CreateMap<GetPagingProductAttrQuery, GetPagingProductAttrParameter>();
