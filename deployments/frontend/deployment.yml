@@ -1,25 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-ecommerce
+  name: fe-ecommerce
   namespace: ecommerce
   labels:
-    app: web-ecommerce
+    app: fe-ecommerce
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-ecommerce
+      app: fe-ecommerce
   template:
     metadata:
       labels:
-        app: web-ecommerce
+        app: fe-ecommerce
     spec:
       containers:
-        - name: web-ecommerce
-          image: giabaodocker/webapp.net:v.0
+        - name: fe-ecommerce
+          image: giabaodocker/fe.ecommerce.local:v.1
           ports:
             - containerPort: 8080
+          env:
+            - name: POSTGRES_CONNECTION_STRING
+              value: "Host=postgresql-master;Database=ecommerce;Username=postgres;Password=postgres"
+            - name: POSTGRES_WRITE_CONN_STRING
+              value: "Host=postgresql-master;Database=ecommerce;Username=postgres;Password=postgres"
+            - name: POSTGRES_READ_CONN_STRING
+              value: "Host=postgresql-slave;Database=ecommerce;Username=postgres;Password=postgres"
+            - name: CLOUDINARY_URL
+              value: "cloudinary://853652539285151:35dgbXUNu7U4_zye8KiQkR5GagA@hqxqmqmoo"
           livenessProbe:
             #  Kiểm tra điểm cuối /healthz của ứng dụng web trên cổng 8081.
             #Nếu điểm cuối này không phản hồi (hoặc phản hồi với trạng thái khác 2xx hoặc 3xx), Kubernetes sẽ khởi động lại container.

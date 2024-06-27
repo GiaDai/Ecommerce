@@ -4,7 +4,6 @@ using Ecommerce.Infrastructure.Identity;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Shared;
 using Ecommerce.WebApp.Server.Extensions;
-using Ecommerce.WebApp.Server.HostedService;
 using Ecommerce.WebApp.Server.Initializer;
 using Ecommerce.WebApp.Server.Services;
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +31,7 @@ _services.AddApiVersioningExtension();
 _services.AddHealthChecks();
 _services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 _services.AddHttpClient();
-_services.AddSingleton<IHostedService, RecureHostedService>();
+// _services.AddSingleton<IHostedService, RecureHostedService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 _services.AddEndpointsApiExplorer();
 

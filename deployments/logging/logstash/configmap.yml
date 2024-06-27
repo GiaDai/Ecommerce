@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: ecommerce
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+  logstash.conf: |
+    input {
+      tcp {
+        port => 5044
+        codec => "json"
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => ["http://elasticsearch.ecommerce.svc.cluster.local:9200"]
+        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+        document_type => "%{[@metadata][type]}"
+      }
+    }

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  fluentbit:
+    image: fluent/fluent-bit:1.6
+    ports:
+      - "24224:24224"  # Cổng nhận log từ ứng dụng của bạn
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./logs:/fluent-bit/logs
+    environment:
+      - FLUENT_UID=1000  # User ID trong container Fluent Bit
+      - FLUENT_GID=1000  # Group ID trong container Fluent Bit
+    networks:
+      - ecommerce
+networks:
+  ecommerce:
+    driver: bridge
+    name: ecommerce
+    external: true
