@@ -61,6 +61,7 @@ jobs:
         run: |
           kubectl apply -f deployments/frontend/deployment.yml
           kubectl apply -f deployments/frontend/service.yml
+          kubectl apply -f deployments/frontend/ingress.yml
 
       - name: Update Kubernetes Deployment image
         if: github.event_name != 'pull_request'
