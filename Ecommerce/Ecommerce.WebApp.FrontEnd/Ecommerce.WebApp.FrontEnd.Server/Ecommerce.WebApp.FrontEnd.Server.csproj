@@ -26,6 +26,9 @@
     <PackageReference Include="Serilog.Sinks.Network" Version="2.0.2.68" />
     <PackageReference Include="Serilog.Sinks.Udp" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
+    <PackageReference Include="SerilogTracing" Version="2.0.0" />
+    <PackageReference Include="SerilogTracing.Expressions" Version="2.0.0" />
+    <PackageReference Include="SerilogTracing.Instrumentation.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

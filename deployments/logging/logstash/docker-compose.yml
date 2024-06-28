@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.10.1
+    ports:
+      - "5044:5044/udp"
+    networks:
+      - ecommerce
+    volumes:
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs:/usr/share/logstash/logs
+volumes:
+  config-volume:
+    driver: local
+  pipeline-volume:
+    driver: local
+networks:
+  ecommerce:
+    driver: bridge
+    name: ecommerce
+    external: true
