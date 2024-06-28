@@ -22,11 +22,11 @@ var configSerilog = new ConfigurationBuilder()
     .Build();
 //Initialize Logger
 Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Information) // Log EF Core SQL
-                                                                                                        // .ReadFrom.Configuration(configSerilog)
     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}")
     .WriteTo.Udp(
         remoteAddress: "localhost",  // Thay 'logstash-host' bằng địa chỉ IP hoặc hostname của Logstash

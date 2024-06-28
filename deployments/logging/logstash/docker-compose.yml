@@ -11,10 +11,39 @@ services:
       - ./logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logs:/usr/share/logstash/logs
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Điều chỉnh heap memory tối thiểu và tối đa cho Elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"  # Port transport cho Elasticsearch (nếu cần thiết)
+    networks:
+      - ecommerce
+    volumes:
+      - esdata:/usr/share/elasticsearch/data  # Mount volume để lưu trữ dữ liệu Elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - ecommerce
+    depends_on:
+      - elasticsearch
+
 volumes:
   config-volume:
     driver: local
   pipeline-volume:
+    driver: local
+  esdata:
     driver: local
 networks:
   ecommerce:
