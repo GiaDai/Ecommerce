@@ -16,6 +16,7 @@ spec:
         app: be-ecommerce
     spec:
       securityContext:
+        runAsUser: 1000
         fsGroup: 1001
       containers:
         - name: be-ecommerce
@@ -42,6 +43,7 @@ spec:
             - name: be-ecommerce-volume
               mountPath: /app/wwwroot/policy.csv
               subPath: policy.csv
+              readOnly: false
             - name: be-ecommerce-volume
               mountPath: /app/wwwroot/model.conf
               subPath: model.conf
